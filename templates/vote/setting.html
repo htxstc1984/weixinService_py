@@ -12,24 +12,26 @@
     <script src="/static/js/jquery-1.11.1.min.js"></script>
     <script src="/static/js/easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript">
-        function showcontent(language) {
-            $('#content').html('Introduction to ' + language + ' language');
-        }
+        //        function showcontent(language) {
+        //            $('#content').html('Introduction to ' + language + ' language');
+        //        }
         $(function () {
             $('.easyui-layout').layout({height: document.body.clientHeight * 0.7});
-            showcontent('java');
+//            showcontent('java');
+            $('#tt').tree({
+                url: '/getTree',
+                loadFilter: function (data) {
+                    return data
+                }
+            });
         });
     </script>
 </head>
 <body>
 <div class="easyui-layout" style="width:100%;height:800px;">
-    <div region="west" split="true" title="Navigator" style="width:150px;">
-        <p style="padding:5px;margin:0;">Select language:</p>
-        <ul>
-            <li><a href="javascript:void(0)" onclick="showcontent('java')">Java</a></li>
-            <li><a href="javascript:void(0)" onclick="showcontent('cshape')">C#</a></li>
-            <li><a href="javascript:void(0)" onclick="showcontent('vb')">VB</a></li>
-            <li><a href="javascript:void(0)" onclick="showcontent('erlang')">Erlang</a></li>
+    <div region="west" split="true" title="所有投票" style="width:150px;">
+        <ul id="tt" class="easyui-tree">
+
         </ul>
     </div>
     <div id="content" region="center" title="Language" style="padding:5px;">

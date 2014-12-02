@@ -6,23 +6,14 @@ Created on '2014/12/2'
 '''
 
 from wxLib.meta.vote.voteMeta import *
-from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
-
-class Vote_schema(Vote_schema_meta):
-    items = db.relationship('Vote_item')
-
-class Vote_item(Vote_item_meta):
-    schema_id = db.relationship(db.Column(db.Integer,db.ForeignKey('vote_schema.id')))
-    actions = db.relationship('Vote_action')
-
-class Vote_action(Vote_action_meta):
-    item_id = db.relationship(db.Column(db.Integer,db.ForeignKey('vote_item.id')))
 
 if __name__ == '__main__':
+    item = Vote_item(itemtitle='item1', itemdesc='item1')
+    schema = Vote_schema(schemaname='test1', desc="test1", fromDate=db.DateTime(), toDate=db.DateTime(),
+                         createDate=db.DateTime(), creator='htx', items=[item])
+    assert isinstance(Vote_schema.query, query)
+    aa = Vote_schema.query.all()
 
-    from wxLib.db import mysqlDB
-
-    schemas = mysqlDB.getSession().query(Vote_schema)
-
+    # db.session.add(schema)
+    # db.session.commit()
     pass

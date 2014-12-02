@@ -15,6 +15,8 @@ mysqldb = dict(
                 charset='utf8'
             )
 
+SQLALCHEMY_DATABASE_URI = 'mysql://root:root@172.16.10.170:3306/weixin_py?charset=utf8'
+
 nosqldb = dict(
                 driverName='mongo',
                 host='172.16.10.170' ,
