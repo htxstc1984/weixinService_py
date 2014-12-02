@@ -14,6 +14,12 @@ from pymongo.mongo_client import MongoClient
 from threading import Thread
 from jinja2.loaders import PackageLoader
 from conf import globalConf
+from sqlalchemy.engine import create_engine
+from sqlalchemy.ext.declarative.api import declarative_base
+from sqlalchemy.orm import create_session, relation
+from sqlalchemy.orm.session import sessionmaker, Session
+from sqlalchemy.sql.schema import Column, ForeignKey
+from sqlalchemy.sql.sqltypes import String, Integer, Text
 
 
 class nosqlDB:
@@ -23,30 +29,31 @@ class nosqlDB:
     gfs = None
     instance = None
     locker = threading.RLock()
-    
+
     @staticmethod
     def _conn():
         if not nosqlDB.con:
             try:
-#                 config = ConfigParser.ConfigParser()
-#                 config.readfp(open(PackageLoader('conf','db.ini')))
+                # config = ConfigParser.ConfigParser()
+                # config.readfp(open(PackageLoader('conf','db.ini')))
                 nosqlDB.initParas = globalConf.nosqldb
-                nosqlDB.con = Connection(host=nosqlDB.initParas['host'], port=nosqlDB.initParas['port'], max_pool_size=100)
-    #             nosqlDB.con = MongoClient(host=nosqlDB.initParas['host'], port=nosqlDB.initParas['port'], max_pool_size=200)
-                
+                nosqlDB.con = Connection(host=nosqlDB.initParas['host'], port=nosqlDB.initParas['port'],
+                                         max_pool_size=100)
+                # nosqlDB.con = MongoClient(host=nosqlDB.initParas['host'], port=nosqlDB.initParas['port'], max_pool_size=200)
+
                 nosqlDB.db = Database(nosqlDB.con, nosqlDB.initParas['db'])
                 if nosqlDB.initParas['isauth'] == '1':
                     nosqlDB.db.auth(nosqlDB.initParas['user'], nosqlDB.initParas['passwd'])
                 nosqlDB.gfs = GridFS(nosqlDB.db, 'files')
-            except BaseException,e:
+            except BaseException, e:
                 print e
-    
+
     def __init__(self):
         print 'init...'
         self._conn()
-        print "server info " + " * " 
+        print "server info " + " * "
         print nosqlDB.con.server_info
-    
+
     @staticmethod
     def getInstance():
         nosqlDB.locker.acquire()
@@ -58,22 +65,36 @@ class nosqlDB:
             print e
         finally:
             nosqlDB.locker.release()
-    
-    
+
+
+class mysqlDB:
+    engine = None
+    locker = threading.RLock()
+
+    @staticmethod
+    def create():
+        mysqlDB.locker.acquire()
+        try:
+            mysqlDB.engine = create_engine('mysql://%s:%s@%s/%s?charset=utf8' % (
+                globalConf.mysqldb['user'], globalConf.mysqldb['passwd'], globalConf.mysqldb['host'],
+                globalConf.mysqldb['db']), pool_size=10)
+        except BaseException, e:
+            raise
+        finally:
+            mysqlDB.locker.release()
+
+    @staticmethod
+    def getSession():
+        if mysqlDB.engine == None:
+            try:
+                mysqlDB.create()
+            except BaseException, e:
+                raise
+        session = create_session(sessionmaker(autocommit=False,
+                                              autoflush=False,
+                                              bind=mysqlDB.engine))
+        return session
+
 
 if __name__ == '__main__':
-    
-#     dbcon = nosqlDB.getInstance()
-#     print dbcon.db.user.insert({'a':threading.current_thread().name})
-    
-#     def callback():
-#         dbcon = nosqlDB.getInstance()
-#         print dbcon.db.user.insert({'a':threading.current_thread().name})
-#         print threading.current_thread().name
-#     for i in range(10):
-#         th = Thread(target=callback)
-#         th.start()
-#         th.join()
-    
-#     print 'over'
     pass

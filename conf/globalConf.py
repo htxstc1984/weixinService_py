@@ -11,8 +11,8 @@ mysqldb = dict(
                 port=3306,
                 user='root',
                 passwd='root',
-                db='itgfz2014',
-                charset='gbk'
+                db='weixin_py',
+                charset='utf8'
             )
 
 nosqldb = dict(

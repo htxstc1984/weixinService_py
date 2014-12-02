@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="jquery,ui,easy,easyui,web">
+    <meta name="description" content="easyui help you build your web page easily!">
+    <title>配置投票信息</title>
+    <link rel="stylesheet" type="text/css" href="/static/js/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/static/js/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="/static/js/easyui/demo/demo.css">
+    <script src="/static/js/jquery-1.11.1.min.js"></script>
+    <script src="/static/js/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript">
+        function showcontent(language) {
+            $('#content').html('Introduction to ' + language + ' language');
+        }
+        $(function () {
+            $('.easyui-layout').layout({height: document.body.clientHeight * 0.7});
+            showcontent('java');
+        });
+    </script>
+</head>
+<body>
+<div class="easyui-layout" style="width:100%;height:800px;">
+    <div region="west" split="true" title="Navigator" style="width:150px;">
+        <p style="padding:5px;margin:0;">Select language:</p>
+        <ul>
+            <li><a href="javascript:void(0)" onclick="showcontent('java')">Java</a></li>
+            <li><a href="javascript:void(0)" onclick="showcontent('cshape')">C#</a></li>
+            <li><a href="javascript:void(0)" onclick="showcontent('vb')">VB</a></li>
+            <li><a href="javascript:void(0)" onclick="showcontent('erlang')">Erlang</a></li>
+        </ul>
+    </div>
+    <div id="content" region="center" title="Language" style="padding:5px;">
+    </div>
+</div>
+</body>
+</html>
