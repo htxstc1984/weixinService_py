@@ -17,6 +17,7 @@ class Vote_schema(db.Model, Base):
     createDate = db.Column('createDate', db.DateTime, nullable=False)
     lastDate = db.Column('lastDate', db.DateTime, nullable=True)
     creator = db.Column('creator', db.Unicode(255), nullable=False)
+    picurl = db.Column('picurl', db.Unicode(255), nullable=True)
     mutiable = db.Column('mutiable', db.Integer, nullable=False, default=0)
     mutimax = db.Column('mutimax', db.Integer, nullable=False, default=0)
     items = db.relationship('Vote_item')
@@ -28,6 +29,7 @@ class Vote_item(db.Model, Base):
     schema_id = db.Column('schema_id', db.Integer, db.ForeignKey('vote_schema.id'), primary_key=True, nullable=False)
     itemtitle = db.Column('itemtitle', db.Unicode(255), nullable=False)
     itemdesc = db.Column('itemdesc', db.Text, nullable=False)
+    picurl = db.Column('picurl', db.Unicode(255), nullable=True)
     actions = db.relationship('Vote_action')
 
 

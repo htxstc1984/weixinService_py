@@ -6,6 +6,8 @@ Created on 2014年11月12日
 '''
 import os, sys
 from globalVars import *
+
+print os.path.dirname(__file__)
 execfile(os.path.dirname(__file__) + "\\wxLib\\controller\\vote_controller.py")
 
 if __name__ == '__main__':

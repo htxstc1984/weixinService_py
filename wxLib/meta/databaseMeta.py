@@ -11,8 +11,7 @@ thePath = thePath[:thePath.find("weixinService_py\\") + len('weixinService_py')]
 sys.path.append(thePath)
 
 from globalVars import *
-
-execfile(os.path.dirname(__file__) + "\\voteMeta.py")
+execfile(os.getcwdu() + "\\voteMeta.py")
 
 
 if __name__ == '__main__':

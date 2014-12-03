@@ -12,29 +12,51 @@
     <script src="/static/js/jquery-1.11.1.min.js"></script>
     <script src="/static/js/easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript">
-        //        function showcontent(language) {
-        //            $('#content').html('Introduction to ' + language + ' language');
-        //        }
         $(function () {
             $('.easyui-layout').layout({height: document.body.clientHeight * 0.7});
-//            showcontent('java');
-            $('#tt').tree({
+            $('#schema_tree').tree({
                 url: '/getTree',
-                loadFilter: function (data) {
-                    return data
+                onDblClick: function (node) {
+                    if($('#tabs').tabs('exists',node.text)){
+                        return;
+                    }
+                    var url = '/schemaView/'+node.id;
+                    var content = '<iframe scrolling="auto" frameborder="0" src=" ' + url + '" style="width:100%;height:100%;"></ifrmae>';
+                    $('#tabs').tabs('add', {
+                        title: node.text,
+                        content: content,
+                        closable: true,
+                        height: '100%',
+                        tools: [{
+                            iconCls: 'icon-mini-refresh',
+                            handler: function () {
+                                alert('refresh');
+                            }
+                        }]
+                    });
                 }
             });
         });
+
+        function newTab(id) {
+
+
+        }
+
+        function createSchema(node) {
+
+        }
     </script>
 </head>
 <body>
 <div class="easyui-layout" style="width:100%;height:800px;">
     <div region="west" split="true" title="所有投票" style="width:150px;">
-        <ul id="tt" class="easyui-tree">
+        <ul id="schema_tree" class="easyui-tree">
 
         </ul>
     </div>
-    <div id="content" region="center" title="Language" style="padding:5px;">
+    <div id="tabs" class="easyui-tabs" region="center" >
+
     </div>
 </div>
 </body>

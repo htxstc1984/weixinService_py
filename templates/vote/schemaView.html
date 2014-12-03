@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="jquery,ui,easy,easyui,web">
+    <meta name="description" content="easyui help you build your web page easily!">
+    <title>配置投票信息</title>
+    <link rel="stylesheet" type="text/css" href="/static/js/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/static/js/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="/static/js/easyui/demo/demo.css">
+    <script src="/static/js/jquery-1.11.1.min.js"></script>
+    <script src="/static/js/easyui/jquery.easyui.min.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.easyui-datetimebox').datetimebox({
+                formatter: dateFormat,
+                parser: parseDate
+            });
+
+            $('#grid_items').datagrid({
+                toolbar: [{
+                    iconCls: 'icon-edit',
+                    handler: function () {
+                        alert('edit')
+                    }
+                }, '-', {
+                    iconCls: 'icon-help',
+                    handler: function () {
+                        alert('help')
+                    }
+                }]
+            });
+            $('#ff').form({
+                url: '/saveSchema',
+                onSubmit: function () {
+                    var items = null;
+                    if ($('#grid_items').datagrid('getData')) {
+                        items = $('#grid_items').datagrid('getData').rows;
+                    }
+                    $('#items').attr({value: items})
+                },
+                success: function (data) {
+                    location.reload()
+                }
+            });
+
+        })
+
+        function saveData() {
+            $('#ff').submit();
+        }
+    </script>
+</head>
+<body>
+<div id="schema_div" class="easyui-panel" title="投票信息"
+     style="width:100%;height:200px;padding:10px;background:#fafafa;"
+     data-options="collapsible:true,maximizable:true">
+    <a id="btn" href="javascript:saveData()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">save</a>
+
+    <form id="ff" method="post" action="/saveSchema">
+        <input type="hidden" name="id" value="{{schema.id}}"/>
+        <input type="hidden" name="items" id="items"/>
+        <table>
+            <tr>
+                <td>
+                    <label for="schemaname">方案名称:</label>
+                    <input class="easyui-validatebox" type="text" name="schemaname" data-options="required:true"
+                           value="{{schema.schemaname}}"/>
+                </td>
+                <td>
+                    <label for="mutimax">可选值个数:</label>
+                    <input class="easyui-numberbox" type="text" name="mutimax" data-options="required:true"
+                           value="{{schema.mutimax}}"/>
+                </td>
+                <td>
+                    <label for="picurl">方案图片:</label>
+                    <input class="easyui-validatebox" type="file" name="picurl" value="{{schema.picurl}}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="fromDate">开始日期:</label>
+                    <input class="easyui-datetimebox" type="text" name="fromDate" data-options="required:true"
+                           value="{{schema.fromDate}}"/>
+                </td>
+                <td>
+                    <label for="toDate">结束日期:</label>
+                    <input class="easyui-datetimebox" type="text" name="toDate" data-options="required:true"
+                           value="{{schema.toDate}}"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="vertical-align: middle">
+                    <label>方案描述:</label>
+                    <textarea rows="5" cols="100" name="desc">{{schema.desc}}</textarea>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="items_div" class="easyui-panel" title="投票项目"
+     style="width:100%;padding:10px;background:#fafafa;">
+
+    <table id="grid_items" class="easyui-datagrid" style="width:100%;"
+           data-options="fitColumns:true,singleSelect:true">
+        <thead>
+        <tr>
+            <th data-options="field:'schema_id',width:100">方案ID</th>
+            <th data-options="field:'id',width:100">ID</th>
+            <th data-options="field:'itemtitle',width:100">项目标题</th>
+            <th data-options="field:'itemdesc',width:100">项目内容</th>
+            <th data-options="field:'picurl',width:100">图片</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in schema.items %}
+        <tr>
+            <td>{{item.schema_id}}</td>
+            <td>{{item.id}}</td>
+            <td>{{item.itemtitle}}</td>
+            <td>{{item.itemdesc}}</td>
+            <td>{{item.picurl}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
