@@ -4,13 +4,11 @@ Created on '2014/12/2'
 
 @author: 'hu'
 '''
-from globalVars import *
-from wxLib.meta.vote.voteMeta import *
-from flask.globals import request, session
-from flask.helpers import url_for
-from werkzeug.utils import redirect
 from flask.templating import render_template
-import simplejson as json
+from json import *
+
+from wxLib.meta.voteMeta import *
+from wxLib.utils import *
 
 
 @app.route('/voteSetting')
@@ -21,7 +19,6 @@ def voteSetting():
 @app.route('/getTree', methods=['GET', 'POST'])
 def getschematree():
     schemas = Vote_schema.query.all()
-
     return createTree(schemas)
 
 
@@ -32,9 +29,9 @@ def createTree(schemas):
         schema_dict = dict()
         schema_dict['id'] = schema.id
         schema_dict['text'] = schema.schemaname
-        # schema_dict['attributes'] = schema
+        schema_dict['attributes'] = sa_obj_to_dict(schema)
         schemas_list.append(schema_dict)
-    return str(json.dumps(schemas_list, sort_keys=True))
+    return str(dumps(schemas_list, cls=CJsonEncoder))
 
 
 if __name__ == '__main__':
