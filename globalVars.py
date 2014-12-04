@@ -12,7 +12,10 @@ from flask.ext.script import Manager
 from conf.globalConf import SQLALCHEMY_DATABASE_URI
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker, query
+import os
 
+ROOT_PATH = os.path.dirname(__file__)
+UPLOAD_FOLDER = '/static/files/'
 try:
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI

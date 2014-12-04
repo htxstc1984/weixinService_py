@@ -1,0 +1,48 @@
+<style>
+    .formItem {
+        width: 100%;
+    }
+
+    .formItem input, .formItem label {
+        display: inline-block;
+        height: 20px;
+        margin-left: 10px;
+        margin-top: 10px;
+        font-size: medium;
+    }
+
+    .formItem img {
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+</style>
+<form id="formItem" class="formItem" method="post" action="/item/save" enctype="multipart/form-data">
+    <input type="hidden" name="schema_id" value="{{item.schema_id}}"/>
+    <input type="hidden" name="id" value="{{(item.id) and item.id or '' }}"/>
+
+    <label for="itemtitle">标题:</label>
+    <input class="easyui-validatebox" type="text" name="itemtitle" data-options="required:true"
+           value="{{(item.itemtitle) and item.itemtitle or '' }}"/>
+    <br>
+
+    <label for="itemdesc">描述:</label>
+    <input class="easyui-validatebox" type="text" name="itemdesc" data-options="required:true"
+           value="{{(item.itemdesc) and item.itemdesc or '' }}"/>
+    <br>
+    {% if item.picurl != None %}
+    <label for="picitem">已上传图片:</label>
+    <br>
+    <img style="width: 200px;" name="picitem" src="{{item.picurl}}">
+    <br>
+    {% endif %}
+    <label for="picurl">上传图片:</label>
+    <input class="easyui-validatebox" type="file" name="picurl" value="{{item.picurl}}"/>
+
+</form>
+<script type="text/javascript">
+    $('#formItem').form({
+        success: function (data) {
+            $('#item_edit').dialog('close');
+        }
+    })
+</script>

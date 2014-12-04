@@ -13,6 +13,7 @@
     <script src="/static/js/easyui/jquery.easyui.min.js"></script>
     <script src="/static/js/utils.js"></script>
     <script type="text/javascript">
+        var schema_id = "{{schema.id}}";
         $(function () {
             $('.easyui-datetimebox').datetimebox({
                 formatter: dateFormat,
@@ -21,12 +22,54 @@
 
             $('#grid_items').datagrid({
                 toolbar: [{
-                    iconCls: 'icon-edit',
+                    iconCls: 'icon-mini-add',
                     handler: function () {
-                        alert('edit')
+                        $('#item_edit').dialog({
+                            title: '新增投票项目',
+                            top: 50,
+                            width: 450,
+                            height: document.body.clientHeight,
+                            closed: false,
+                            cache: false,
+                            href: '/item/add/' + schema_id,
+                            modal: true,
+                            toolbar: [{
+                                iconCls: 'icon-save',
+                                text: '保存',
+                                handler: function () {
+                                    $('#formItem').submit();
+                                }
+                            },]
+                        });
                     }
                 }, '-', {
-                    iconCls: 'icon-help',
+                    iconCls: 'icon-edit',
+                    handler: function () {
+                        var gItem = $('#grid_items').datagrid('getSelected');
+                        if (!gItem) {
+                            alert('请选中一行！')
+                            return;
+                        }
+                        $('#item_edit').dialog({
+                            title: '编辑投票项目',
+                            top: 50,
+                            width: 450,
+                            height: document.body.clientHeight,
+                            closed: false,
+                            cache: false,
+                            href: '/item/edit/' + gItem.id,
+                            modal: true,
+                            toolbar: [{
+                                iconCls: 'icon-save',
+                                text: '保存',
+                                handler: function () {
+                                    $('#formItem').submit();
+                                }
+                            },]
+                        });
+                    }
+                }, '-', {
+                    iconCls: 'icon-large-chart',
                     handler: function () {
                         alert('help')
                     }
@@ -51,15 +94,27 @@
         function saveData() {
             $('#ff').submit();
         }
+
+        function showPic(src) {
+            $('#showImg').dialog({
+                title: '编辑投票项目',
+                top: 50,
+                width: 450,
+                closed: false,
+                cache: false,
+                href: '/showImage/'+src,
+                modal: true
+            });
+        }
     </script>
 </head>
 <body>
 <div id="schema_div" class="easyui-panel" title="投票信息"
      style="width:100%;height:200px;padding:10px;background:#fafafa;"
-     data-options="collapsible:true,maximizable:true">
-    <a id="btn" href="javascript:saveData()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">save</a>
-
-    <form id="ff" method="post" action="/saveSchema">
+     data-options="collapsible:true,maximizable:true,tools:[{iconCls:'icon-save',text:'保存',handler:function(){saveData()}}]">
+    <div id="item_edit"></div>
+    <div id="showImg"></div>
+    <form id="ff" method="post" action="/saveSchema" enctype="multipart/form-data">
         <input type="hidden" name="id" value="{{schema.id}}"/>
         <input type="hidden" name="items" id="items"/>
         <table>
@@ -73,10 +128,6 @@
                     <label for="mutimax">可选值个数:</label>
                     <input class="easyui-numberbox" type="text" name="mutimax" data-options="required:true"
                            value="{{schema.mutimax}}"/>
-                </td>
-                <td>
-                    <label for="picurl">方案图片:</label>
-                    <input class="easyui-validatebox" type="file" name="picurl" value="{{schema.picurl}}"/>
                 </td>
             </tr>
             <tr>
@@ -92,8 +143,18 @@
                 </td>
             </tr>
             <tr>
+                <td>
+                    <label for="picurl">方案图片:</label>
+                    <input class="easyui-validatebox" type="file" name="picurl" value="{{schema.picurl}}"/>
+                    {% if schema.picurl != None %}
+                    <a href="javascript:showPic('{{schema.picurl}}')">查看图片</a>
+                    {% endif %}
+
+                </td>
+            </tr>
+            <tr>
                 <td colspan="4" style="vertical-align: middle">
-                    <label>方案描述:</label>
+                    <label for="desc">方案描述:</label>
                     <textarea rows="5" cols="100" name="desc">{{schema.desc}}</textarea>
                 </td>
             </tr>
@@ -127,5 +188,6 @@
         </tbody>
     </table>
 </div>
+
 </body>
 </html>
