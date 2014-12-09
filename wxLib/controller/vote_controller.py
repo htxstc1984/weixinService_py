@@ -7,7 +7,7 @@ Created on '2014/12/2'
 from flask.templating import render_template
 from json import *
 from flask import make_response
-from flask import request
+from flask import request, session
 from werkzeug.wrappers import Response, Headers
 from werkzeug.utils import secure_filename
 
@@ -113,6 +113,13 @@ def showImage(schema_id=None):
 def getVote(schema_id=None):
     schema = Vote_schema.query.filter_by(id=schema_id).one()
     return render_template('vote/mobi/vote.html', schema=schema)
+
+
+@app.route('/mobi/vote/submit', methods=['POST'])
+def submitVote():
+    session.has_key('openid')
+    data = request.data
+    return 'success'
 
 
 def makeUrl(src):

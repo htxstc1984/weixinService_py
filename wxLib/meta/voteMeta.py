@@ -6,6 +6,8 @@ Created on '2014/12/3'
 '''
 
 from globalVars import *
+from wxLib.utils import *
+
 
 class Vote_schema(db.Model, Base):
     __tablename__ = 'vote_schema'
@@ -22,6 +24,20 @@ class Vote_schema(db.Model, Base):
     mutimax = db.Column('mutimax', db.Integer, nullable=False, default=0)
     items = db.relationship('Vote_item')
 
+    def getSimpleDict(self):
+        return dict(id=self.id,
+                    schemaname=self.schemaname,
+                    desc=self.desc,
+                    fromDate=self.fromDate,
+                    toDate=self.toDate,
+                    createDate=self.createDate,
+                    lastDate=self.lastDate,
+                    creator=self.creator,
+                    picurl=self.picurl,
+                    mutiable=self.mutiable,
+                    mutimax=self.mutimax
+        )
+
 
 class Vote_item(db.Model, Base):
     __tablename__ = 'vote_item'
@@ -32,6 +48,14 @@ class Vote_item(db.Model, Base):
     picurl = db.Column('picurl', db.Unicode(255), nullable=True)
     actions = db.relationship('Vote_action')
 
+    def getSimpleDict(self):
+        return dict(id=self.id,
+                    schema_id=self.schema_id,
+                    itemtitle=self.itemtitle,
+                    itemdesc=self.itemdesc,
+                    picurl=self.picurl
+        )
+
 
 class Vote_action(db.Model, Base):
     __tablename__ = 'vote_action'
@@ -39,6 +63,13 @@ class Vote_action(db.Model, Base):
     openid = db.Column('openid', db.Integer, nullable=False)
     item_id = db.Column('item_id', db.Integer, db.ForeignKey('vote_item.id'))
     voteDate = db.Column('voteDate', db.DateTime, nullable=True)
+
+    def getSimpleDict(self):
+        return dict(id=self.id,
+                    openid=self.openid,
+                    item_id=self.item_id,
+                    voteDate=self.voteDate
+        )
 
 
 if __name__ == '__main__':

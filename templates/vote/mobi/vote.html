@@ -9,32 +9,110 @@
     <link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
-<body ng-app="voteApp" ng-controller="appController">
-<div class="container">
-    <div class="panel-group" id="accordion">
+<script type="text/javascript">
+    var mutimax = {&schema.mutimax&};
+</script>
+<body style="margin: 0;overflow: hidden" ng-app="voteApp" ng-controller="appController">
+<button style="position: fixed;top: 70%;right: 5px" class="btn btn-warning" type="button" ng-click="submit()">
+    <span class="glyphicon glyphicon-ok"></span>
+</button>
+<div class="panel-group" id="accordion">
+    {% set row,total = 1,0 %}
+    <div class="row">
         {% for item in schema.items %}
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="panel-title"></h4>
-
-                    <div class="checkbox" style="display: inline-block;">
-                        <label>
-                            <input type="checkbox">请打勾
-                        </label>
-                    </div>
-                    {&item.itemtitle&}<a data-toggle="collapse" data-parent="#accordion" href="#collapse{&item.id&}">查看详情</a>
+            {% if total==0 %}
+                {% set total = loop.length %}
+            {% endif %}
+            {% if loop.index0>(4*row-1) %}
                 </div>
-                <div class="panel-collapse collapse" id="collapse{&item.id&}">
+                <div class="row">
+                {% set row = row + 1 %}
+            {% endif %}
+            <div class="col-md-3" style="margin: 10px 10px 10px 10px">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            {&item.itemtitle&}
+                        </h3>
+                    </div>
                     <div class="panel-body">
-                        {&item.itemdesc&}<br>
-                        <img style="width: 80%" src="{&item.picurl&}">
+                        <button id="btn{&item.id&}" style="float: right;" class="btn btn-primary"
+                                type="button"
+                                ng-click="addSelect('{&item.id&}')">请选择
+                        </button>
+
+                        <a href="" ng-click="setItem('{&item.itemtitle&}','{&item.itemdesc&}','{&item.picurl&}')"
+                           style="float: left;line-height: 40px">显示详情</a>
                     </div>
                 </div>
+
             </div>
         {% endfor %}
-    </div>
-
+        {% if total%4==0 %}
+            </div>
+        {% endif %}
 </div>
+
+<!-- 详情框 -->
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
+     aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+                <h4 class="modal-title" id="detailModalLabel">
+                    {{ detailItem.itemtitle }}
+                </h4>
+            </div>
+            <div class="modal-body">
+                {{ detailItem.itemdesc }}<br>
+                <img style="width: 80%" ng-src="{{ detailItem.picurl }}" class="img-thumbnail">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 详情框 -->
+<div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="submitModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+                <h4 class="modal-title" id="submitModalLabel">
+                    确认提交
+                </h4>
+            </div>
+            <div class="modal-body">
+                请选择{&schema.mutimax&}个,已选择{{ selectItems.length }}个
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info"
+                        data-dismiss="modal" ng-disabled="fullSelect()" ng-click="submitAction()">提交
+                </button>
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        {#        $('#myModal').modal({#}
+        {#            keyboard: true#}
+        {#        })#}
+    });
+
+</script>
 <script src="http://cdn.bootcss.com/angular.js/1.2.5/angular.min.js"></script>
 <script src="/static/js/voteApp/voteApp.js"></script>
 </body>

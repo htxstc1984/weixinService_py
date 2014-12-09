@@ -1,7 +1,8 @@
 function appController($scope) {
-    $scope.user = {
-        firstname: 'huangtx',
-        lastname: 'tingxi'
+    $scope.itemDetail = {
+        title: '',
+        desc: '',
+        picurl:''
     };
     $scope.fullname = function () {
         return $scope.user.firstname + '' + $scope.user.lastname;

@@ -9,6 +9,7 @@ from sqlalchemy.ext.declarative import DeclarativeMeta
 from json import *
 from datetime import *
 
+
 class CJsonEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
@@ -17,6 +18,11 @@ class CJsonEncoder(JSONEncoder):
             return obj.strftime('%Y-%m-%d')
         else:
             return json.JSONEncoder.default(self, obj)
+
+
+def dict2JsonStr(obj):
+    newObj = dict({k: str(v) for k, v in obj.iteritems()})
+    return newObj
 
 
 def sa_obj_to_dict(obj, filtrate=None, rename=None):
@@ -33,7 +39,7 @@ def sa_obj_to_dict(obj, filtrate=None, rename=None):
         # an SQLAlchemy class
         # 该类的相关类型，即直接与间接父类
         cla = obj.__class__.__mro__
-        #过滤不需要的父类
+        # 过滤不需要的父类
         cla = filter(lambda c: hasattr(c, '__table__'), filter(lambda c: isinstance(c, DeclarativeMeta), cla))
         columns = []
         map(lambda c: columns.extend(c.__table__.columns), cla[::-1])
