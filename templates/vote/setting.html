@@ -11,16 +11,41 @@
     <link rel="stylesheet" type="text/css" href="/static/js/easyui/demo/demo.css">
     <script src="/static/js/jquery-1.11.1.min.js"></script>
     <script src="/static/js/easyui/jquery.easyui.min.js"></script>
+    <script src="/static/js/utils.js"></script>
     <script type="text/javascript">
         $(function () {
             $('.easyui-layout').layout({height: document.body.clientHeight * 0.7});
+            $('#leftTree').bind('contextmenu', function (e) {
+                $('#mm').menu('show', {
+                    left: e.pageX,
+                    top: e.pageY
+                });
+                return false;
+            });
+            createTree();
+        });
+
+        function createTree() {
             $('#schema_tree').tree({
                 url: '/getTree',
+                onContextMenu: function (e, node) {
+                    e.preventDefault();
+                    // select the node
+                    $('#schema_tree').tree('select', node.target);
+                    // display context menu
+                    $('#mm').menu('show', {
+                        left: e.pageX,
+                        top: e.pageY
+                    });
+                },
                 onDblClick: function (node) {
-                    if($('#tabs').tabs('exists',node.text)){
+                    if (!$('#schema_tree').tree('getSelected') || $('#schema_tree').tree('getSelected').id == 'root') {
+                        return
+                    }
+                    if ($('#tabs').tabs('exists', node.text)) {
                         return;
                     }
-                    var url = '/schemaView/'+node.id;
+                    var url = '/schema/view/' + node.id;
                     var content = '<iframe scrolling="auto" frameborder="0" src=" ' + url + '" style="width:100%;height:100%;"></ifrmae>';
                     $('#tabs').tabs('add', {
                         title: node.text,
@@ -36,28 +61,79 @@
                     });
                 }
             });
-        });
-
-        function newTab(id) {
-
-
         }
 
-        function createSchema(node) {
-
+        function menuHandler(item) {
+            if (item.name == 'add') {
+                $('#schema_edit').dialog({
+                    title: '新增投票',
+                    top: 50,
+                    width: 450,
+                    height: 600,
+                    closed: false,
+                    cache: false,
+                    href: '/schema/add',
+                    modal: true,
+                    toolbar: [{
+                        iconCls: 'icon-save',
+                        text: '保存',
+                        handler: function () {
+                            $('#formSchema').form('submit', {
+                                success: function (data) {
+                                    createTree();
+                                    $('#schema_edit').dialog('close');
+                                }
+                            });
+                        }
+                    },]
+                })
+            }
+            if (item.name == 'edit') {
+                if (!$('#schema_tree').tree('getSelected') || $('#schema_tree').tree('getSelected').id == 'root') {
+                    return
+                }
+                $('#schema_edit').dialog({
+                    title: '新增投票',
+                    top: 50,
+                    width: 450,
+                    height: 500,
+                    closed: false,
+                    cache: false,
+                    href: '/schema/edit/' + $('#schema_tree').tree('getSelected').id,
+                    modal: true,
+                    toolbar: [{
+                        iconCls: 'icon-save',
+                        text: '保存',
+                        handler: function () {
+                            $('#formSchema').form('submit', {
+                                success: function (data) {
+                                    createTree();
+                                    $('#schema_edit').dialog('close');
+                                }
+                            });
+                        }
+                    },]
+                })
+            }
         }
+
     </script>
 </head>
 <body>
 <div class="easyui-layout" style="width:100%;height:800px;">
-    <div region="west" split="true" title="所有投票" style="width:150px;">
+    <div id="leftTree" region="west" class="easyui-panel" split="true" title="所有投票" style="width:150px;">
         <ul id="schema_tree" class="easyui-tree">
 
         </ul>
     </div>
-    <div id="tabs" class="easyui-tabs" region="center" >
+    <div id="tabs" class="easyui-tabs" region="center">
 
     </div>
 </div>
+<div id="mm" class="easyui-menu" style="width:120px;" data-options="onClick:menuHandler">
+    <div name="add">新增</div>
+    <div name="edit">修改</div>
+</div>
+<div id="schema_edit"></div>
 </body>
 </html>

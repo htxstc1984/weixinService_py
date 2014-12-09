@@ -17,6 +17,9 @@ function parseDate(dateStr) {
     var regexDT = /(\d{4})-?(\d{2})?-?(\d{2})?\s?(\d{2})?:?(\d{2})?:?(\d{2})?/g;
     var matchs = regexDT.exec(dateStr);
     var date = new Array();
+    if(!matchs){
+        return
+    }
     for (var i = 1; i < matchs.length; i++) {
         if (matchs[i] != undefined) {
             date[i] = matchs[i];

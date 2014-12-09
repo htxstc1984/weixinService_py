@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>在线尝试 Bootstrap 实例</title>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body ng-app="" ng-controller="appController">
+<div class="container">
+    <label for="first"/>first<br>
+    <input type="text" name="first" ng-model="user.firstname"><br>
+    <label for="last"/>last<br>
+    <input type="text" name="last" ng-model="user.lastname"><br>
+    {{fullname()}}
+</div>
+<script src="http://cdn.bootcss.com/angular.js/1.2.5/angular.min.js"></script>
+<script src="myUsers.js"></script>
+</body>
+</html>

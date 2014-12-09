@@ -30,13 +30,27 @@ def getschematree():
     return resp
 
 
-@app.route('/schemaView/<schemaid>')
-def getVoteItems(schemaid=None):
-    schema = Vote_schema.query.filter_by(id=schemaid).one()
+@app.route('/schema/view/<schema_id>', methods=['GET', 'POST'])
+def getVoteItems(schema_id=None):
+    schema = Vote_schema.query.filter_by(id=schema_id).one()
     return render_template('vote/schemaView.html', schema=schema)
 
 
-@app.route('/saveSchema', methods=['GET', 'POST'])
+@app.route('/schema/add', methods=['GET', 'POST'])
+def schemaAdd():
+    schema = Vote_schema()
+    schema.fromDate = datetime.utcnow()
+    schema.toDate = datetime.utcnow()
+    return render_template('vote/schemaEdit.html', schema=schema)
+
+
+@app.route('/schema/edit/<schema_id>', methods=['GET', 'POST'])
+def schemaEdit(schema_id=None):
+    schema = Vote_schema.query.filter_by(id=schema_id).one()
+    return render_template('vote/schemaEdit.html', schema=schema)
+
+
+@app.route('/schema/save', methods=['GET', 'POST'])
 def saveSchema():
     schema = Vote_schema()
     schema.id = (request.form['id']) and int(request.form['id']) or schema.id
@@ -47,8 +61,10 @@ def saveSchema():
     schema.desc = (request.form['desc']) and request.form['desc'] or schema.desc
     schema.mutimax = (request.form['mutimax']) and int(request.form['mutimax']) or schema.mutimax
     schema.lastDate = datetime.utcnow()
+    if (schema.id == None):
+        schema.createDate = datetime.utcnow()
 
-    if request.files['picurl']:
+    if request.files and request.files['picurl']:
         f = request.files['picurl']
         fname = str(datetime.utcnow().strftime('%Y%M%d_%H%M%S%f')) + f.filename[
                                                                      f.filename.rfind('.'):]  # 获取一个安全的文件名，且仅仅支持ascii字符；
@@ -56,6 +72,7 @@ def saveSchema():
         schema.picurl = UPLOAD_FOLDER + fname
     db_session.merge(schema)
     db_session.commit()
+    return "{'sucess':true}"
 
 
 @app.route('/item/add/<schema_id>')
@@ -75,7 +92,7 @@ def saveItem():
     item = Vote_item(**request.form)
     item.id = (request.form['id']) and int(request.form['id']) or None
     item.schema_id = (request.form['schema_id']) and int(request.form['schema_id']) or None
-    if request.files['picurl']:
+    if request.files and request.files['picurl']:
         f = request.files['picurl']
         fname = str(datetime.utcnow().strftime('%Y%M%d_%H%M%S%f')) + f.filename[
                                                                      f.filename.rfind('.'):]  # 获取一个安全的文件名，且仅仅支持ascii字符；
@@ -83,14 +100,27 @@ def saveItem():
         item.picurl = UPLOAD_FOLDER + fname
     db_session.merge(item)
     db_session.commit()
+    return "{'sucess':true}"
 
 
-@app.route('/showImage/<src>')
-def showImage(src=None):
-    render_template('common/showImage.html', src=src)
+@app.route('/showImage/<schema_id>')
+def showImage(schema_id=None):
+    schema = Vote_schema.query.filter_by(id=schema_id).one()
+    return render_template('common/showImage.html', src=schema.picurl)
+
+
+@app.route('/mobi/vote/<schema_id>')
+def getVote(schema_id=None):
+    schema = Vote_schema.query.filter_by(id=schema_id).one()
+    return render_template('vote/mobi/vote.html', schema=schema)
+
+
+def makeUrl(src):
+    return 'http://' + ROOT_PATH + src
 
 
 def createTree(schemas):
+    root = dict({"id": 'root', "text": "全部投票", "state": "closed"})
     schemas_list = list()
     for schema in schemas:
         assert isinstance(schema, Vote_schema)
@@ -99,7 +129,8 @@ def createTree(schemas):
         schema_dict['text'] = schema.schemaname
         schema_dict['attributes'] = sa_obj_to_dict(schema)
         schemas_list.append(schema_dict)
-    return str(dumps(schemas_list, cls=CJsonEncoder))
+    root['children'] = schemas_list
+    return str(dumps([root], cls=CJsonEncoder))
 
 
 if __name__ == '__main__':

@@ -13,7 +13,7 @@
     <script src="/static/js/easyui/jquery.easyui.min.js"></script>
     <script src="/static/js/utils.js"></script>
     <script type="text/javascript">
-        var schema_id = "{{schema.id}}";
+        var schema_id = "{&schema.id&}";
         $(function () {
             $('.easyui-datetimebox').datetimebox({
                 formatter: dateFormat,
@@ -22,7 +22,7 @@
 
             $('#grid_items').datagrid({
                 toolbar: [{
-                    iconCls: 'icon-mini-add',
+                    iconCls: 'icon-add',
                     handler: function () {
                         $('#item_edit').dialog({
                             title: '新增投票项目',
@@ -37,7 +37,11 @@
                                 iconCls: 'icon-save',
                                 text: '保存',
                                 handler: function () {
-                                    $('#formItem').submit();
+                                    $('#formItem').form('submit', {
+                                        success: function (data) {
+                                            location.reload()
+                                        }
+                                    });
                                 }
                             },]
                         });
@@ -63,7 +67,11 @@
                                 iconCls: 'icon-save',
                                 text: '保存',
                                 handler: function () {
-                                    $('#formItem').submit();
+                                    $('#formItem').form('submit', {
+                                        success: function (data) {
+                                            location.reload()
+                                        }
+                                    });
                                 }
                             },]
                         });
@@ -78,11 +86,6 @@
             $('#ff').form({
                 url: '/saveSchema',
                 onSubmit: function () {
-                    var items = null;
-                    if ($('#grid_items').datagrid('getData')) {
-                        items = $('#grid_items').datagrid('getData').rows;
-                    }
-                    $('#items').attr({value: items})
                 },
                 success: function (data) {
                     location.reload()
@@ -92,17 +95,21 @@
         })
 
         function saveData() {
-            $('#ff').submit();
+            $('#ff').form('submit', {
+                success: function (data) {
+                    location.reload()
+                }
+            });
         }
 
-        function showPic(src) {
+        function showPic(schemaid) {
             $('#showImg').dialog({
-                title: '编辑投票项目',
+                title: '查看图片',
                 top: 50,
                 width: 450,
                 closed: false,
                 cache: false,
-                href: '/showImage/'+src,
+                href: '/showImage/' + schemaid,
                 modal: true
             });
         }
@@ -110,52 +117,52 @@
 </head>
 <body>
 <div id="schema_div" class="easyui-panel" title="投票信息"
-     style="width:100%;height:200px;padding:10px;background:#fafafa;"
+     style="width:100%;height:240px;padding:10px;background:#fafafa;"
      data-options="collapsible:true,maximizable:true,tools:[{iconCls:'icon-save',text:'保存',handler:function(){saveData()}}]">
     <div id="item_edit"></div>
     <div id="showImg"></div>
-    <form id="ff" method="post" action="/saveSchema" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="{{schema.id}}"/>
+    <form id="ff" method="post" action="/schema/save" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{&schema.id&}"/>
         <input type="hidden" name="items" id="items"/>
         <table>
             <tr>
                 <td>
                     <label for="schemaname">方案名称:</label>
                     <input class="easyui-validatebox" type="text" name="schemaname" data-options="required:true"
-                           value="{{schema.schemaname}}"/>
+                           value="{&schema.schemaname&}"/>
                 </td>
                 <td>
                     <label for="mutimax">可选值个数:</label>
                     <input class="easyui-numberbox" type="text" name="mutimax" data-options="required:true"
-                           value="{{schema.mutimax}}"/>
+                           value="{&schema.mutimax&}"/>
                 </td>
             </tr>
             <tr>
                 <td>
                     <label for="fromDate">开始日期:</label>
                     <input class="easyui-datetimebox" type="text" name="fromDate" data-options="required:true"
-                           value="{{schema.fromDate}}"/>
+                           value="{&schema.fromDate&}"/>
                 </td>
                 <td>
                     <label for="toDate">结束日期:</label>
                     <input class="easyui-datetimebox" type="text" name="toDate" data-options="required:true"
-                           value="{{schema.toDate}}"/>
+                           value="{&schema.toDate&}"/>
                 </td>
             </tr>
             <tr>
                 <td>
                     <label for="picurl">方案图片:</label>
-                    <input class="easyui-validatebox" type="file" name="picurl" value="{{schema.picurl}}"/>
+                    <input class="easyui-validatebox" type="file" name="picurl" value="{&schema.picurl&}"/>
                     {% if schema.picurl != None %}
-                    <a href="javascript:showPic('{{schema.picurl}}')">查看图片</a>
+                    <a href="javascript:showPic('{&schema.id&}')">查看图片</a>
                     {% endif %}
 
                 </td>
             </tr>
             <tr>
-                <td colspan="4" style="vertical-align: middle">
+                <td colspan="4">
                     <label for="desc">方案描述:</label>
-                    <textarea rows="5" cols="100" name="desc">{{schema.desc}}</textarea>
+                    <textarea rows="5" cols="100" name="desc">{&schema.desc&}</textarea>
                 </td>
             </tr>
         </table>
@@ -178,11 +185,11 @@
         <tbody>
         {% for item in schema.items %}
         <tr>
-            <td>{{item.schema_id}}</td>
-            <td>{{item.id}}</td>
-            <td>{{item.itemtitle}}</td>
-            <td>{{item.itemdesc}}</td>
-            <td>{{item.picurl}}</td>
+            <td>{&item.schema_id&}</td>
+            <td>{&item.id&}</td>
+            <td>{&item.itemtitle&}</td>
+            <td>{&item.itemdesc&}</td>
+            <td>{&item.picurl&}</td>
         </tr>
         {% endfor %}
         </tbody>

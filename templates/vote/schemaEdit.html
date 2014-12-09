@@ -1,0 +1,94 @@
+<style>
+    .formSchema {
+        width: 100%;
+    }
+
+    .itemTitle {
+        display: inline-block;
+        width: 100px;
+    }
+
+    .formSchema input, .formSchema textarea {
+        width: 200px;
+    }
+
+    .lineItem {
+        width: 90%;
+        height: 25px;
+        margin-left: 10px;
+        margin-top: 10px;
+        font-size: medium;
+    }
+
+    .blockItem {
+        width: 90%;
+        height: 50px;
+        margin-left: 10px;
+        margin-top: 10px;
+        font-size: medium;
+    }
+
+    .blockItem .itemTitle {
+        float: left;
+        display: block;
+        height: 50px;
+        line-height: 50px;;
+    }
+
+    .blockItem textarea {
+        float: left;
+        display: block;
+        height: 35px;
+        margin-left: 10px;
+    }
+
+    .formSchema img {
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+</style>
+<form id="formSchema" class="formSchema" method="post" action="/schema/save" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="{&(schema.id) and schema.id or '' &}"/>
+
+    <div class="lineItem">
+        <span class="itemTitle">标题:</span>
+        <input class="easyui-validatebox" type="text" name="schemaname" data-options="required:true"
+               value="{&(schema.schemaname) and schema.schemaname or '' &}"/>
+    </div>
+    <div class="lineItem">
+        <span class="itemTitle">可选值个数:</span>
+        <input class="easyui-validatebox" type="text" name="mutimax" data-options="required:true"
+               value="{&(schema.mutimax) and schema.mutimax or '' &}"/>
+    </div>
+    <div class="lineItem">
+        <span class="itemTitle">开始日期:</span>
+        <input class="easyui-datetimebox" type="text" name="fromDate" data-options="required:true"
+               value="{&(schema.fromDate) and schema.fromDate or '' &}"/>
+    </div>
+    <div class="lineItem">
+        <span class="itemTitle">结束日期:</span>
+        <input class="easyui-datetimebox" type="text" name="toDate" data-options="required:true"
+               value="{&(schema.toDate) and schema.toDate or '' &}"/>
+    </div>
+    <div class="blockItem">
+        <span class="itemTitle">方案描述:</span>
+        <textarea rows="5" cols="30" name="desc">{&(schema.desc) and schema.desc or '' &}</textarea>
+    </div>
+    {% if schema.picurl != None %}
+    <div class="blockItem">
+        <span class="itemTitle">已上传图片:</span>
+        <img style="height: 50px;" name="picitem" src="{&schema.picurl&}">
+        <br>
+    </div>
+    {% endif %}
+    <div class="lineItem">
+        <span class="itemTitle">上传图片:</span>
+        <input class="easyui-validatebox" type="file" name="picurl" value="{&schema.picurl&}"/>
+    </div>
+</form>
+<script type="text/javascript">
+    $('.easyui-datetimebox').datetimebox({
+        formatter: dateFormat,
+        parser: parseDate
+    });
+</script>

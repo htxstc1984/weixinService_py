@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{&schema.schemaname&}</title>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body ng-app="voteApp" ng-controller="appController">
+<div class="container">
+    <div class="panel-group" id="accordion">
+        {% for item in schema.items %}
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4 class="panel-title"></h4>
+
+                    <div class="checkbox" style="display: inline-block;">
+                        <label>
+                            <input type="checkbox">请打勾
+                        </label>
+                    </div>
+                    {&item.itemtitle&}<a data-toggle="collapse" data-parent="#accordion" href="#collapse{&item.id&}">查看详情</a>
+                </div>
+                <div class="panel-collapse collapse" id="collapse{&item.id&}">
+                    <div class="panel-body">
+                        {&item.itemdesc&}<br>
+                        <img style="width: 80%" src="{&item.picurl&}">
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+<script src="http://cdn.bootcss.com/angular.js/1.2.5/angular.min.js"></script>
+<script src="/static/js/voteApp/voteApp.js"></script>
+</body>
+</html>

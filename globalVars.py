@@ -31,6 +31,10 @@ try:
     Base = declarative_base()
     Base.query = db_session.query_property()
 
+    temp_env = app.jinja_env
+    temp_env.variable_start_string = '{&'
+    temp_env.variable_end_string = '&}'
+
 except BaseException, e:
     print e.message
 
