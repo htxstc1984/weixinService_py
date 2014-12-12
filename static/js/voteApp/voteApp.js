@@ -38,14 +38,13 @@ app.controller('appController', function ($scope, $http) {
 
     $scope.submitMsg = "";
     $scope.submitAction = function () {
-
         $http.post('/mobi/vote/submit', {
             openid: openid,
             schema_id: schema_id,
             selectItems: $scope.selectItems
         }).success(function (data) {
             if (data == 'error') {
-                $scope.submitMsg = '提交失败，请重试';
+                $scope.submitMsg = '提交失败，请刷新页面重试';
             } else {
                 $scope.submitMsg = '投票成功';
             }
