@@ -12,9 +12,8 @@ app.controller('appController', function ($scope, $http) {
     $scope.selectItems = new Array();
 
     $scope.addSelect = function (item_id) {
-        var _exist = $.inArray(item_id, $scope.selectItems);
-        if (_exist != -1) {
-            $scope.selectItems.pop(item_id);
+        var checked = $('#btn' + item_id).hasClass('btn-danger');
+        if (checked) {
             $('#btn' + item_id).removeClass('btn-danger');
             $('#btn' + item_id).addClass('btn-primary');
             $('#btn' + item_id).text('请选择')
@@ -28,14 +27,31 @@ app.controller('appController', function ($scope, $http) {
     }
 
     $scope.submit = function () {
+        $scope.selectItems = new Array();
+        $('.btn-danger').each(function () {
+            $scope.selectItems.push($(this).attr('bindid'));
+        })
         $('#submitModal').modal({
             keyboard: true
         })
     }
 
+    $scope.submitMsg = "";
     $scope.submitAction = function () {
-        $http.post('/mobi/vote/submit', $scope.selectItems).success(function (data) {
-            alert("data:" + data)
+
+        $http.post('/mobi/vote/submit', {
+            openid: openid,
+            schema_id: schema_id,
+            selectItems: $scope.selectItems
+        }).success(function (data) {
+            if (data == 'error') {
+                $scope.submitMsg = '提交失败，请重试';
+            } else {
+                $scope.submitMsg = '投票成功';
+            }
+            $('#msgModal').modal({
+                keyboard: true
+            })
         })
     }
 

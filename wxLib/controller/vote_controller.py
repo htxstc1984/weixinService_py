@@ -7,12 +7,14 @@ Created on '2014/12/2'
 from flask.templating import render_template
 from json import *
 from flask import make_response
-from flask import request, session
+from flask import request
 from werkzeug.wrappers import Response, Headers
 from werkzeug.utils import secure_filename
-
+import simplejson
 from wxLib.meta.voteMeta import *
 from wxLib.utils import *
+from wxLib.callws.ehr import *
+from sqlalchemy import and_, or_, func
 import os
 
 
@@ -52,17 +54,11 @@ def schemaEdit(schema_id=None):
 
 @app.route('/schema/save', methods=['GET', 'POST'])
 def saveSchema():
-    schema = Vote_schema()
-    schema.id = (request.form['id']) and int(request.form['id']) or schema.id
-    schema.schemaname = (request.form['schemaname']) and request.form['schemaname'] or schema.schemaname
+    schema = Vote_schema.getStrInstance(**request.form)
     schema.creator = u'htx'
-    schema.fromDate = (request.form['fromDate']) and request.form['fromDate'] or schema.fromDate
-    schema.toDate = (request.form['toDate']) and request.form['toDate'] or schema.toDate
-    schema.desc = (request.form['desc']) and request.form['desc'] or schema.desc
-    schema.mutimax = (request.form['mutimax']) and int(request.form['mutimax']) or schema.mutimax
-    schema.lastDate = datetime.utcnow()
+    schema.lastDate = unicode(datetime.utcnow())
     if (schema.id == None):
-        schema.createDate = datetime.utcnow()
+        schema.createDate = unicode(datetime.utcnow())
 
     if request.files and request.files['picurl']:
         f = request.files['picurl']
@@ -89,9 +85,7 @@ def getItem(itemid=None):
 
 @app.route('/item/save', methods=['GET', 'POST'])
 def saveItem():
-    item = Vote_item(**request.form)
-    item.id = (request.form['id']) and int(request.form['id']) or None
-    item.schema_id = (request.form['schema_id']) and int(request.form['schema_id']) or None
+    item = Vote_item.getStrInstance(**request.form)
     if request.files and request.files['picurl']:
         f = request.files['picurl']
         fname = str(datetime.utcnow().strftime('%Y%M%d_%H%M%S%f')) + f.filename[
@@ -109,17 +103,54 @@ def showImage(schema_id=None):
     return render_template('common/showImage.html', src=schema.picurl)
 
 
-@app.route('/mobi/vote/<schema_id>')
-def getVote(schema_id=None):
+@app.route('/mobi/vote/<schema_id>/<openid>')
+def getVote(schema_id=None, openid=None):
+    if openid == None:
+        if session.has_key('openid'):
+            openid = session.get('openid')
+        else:
+            return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份')
+    rs = checkOpenid(openid)
+    if rs['resultCode'] != 0:
+        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份')
+    session['openid'] = openid
     schema = Vote_schema.query.filter_by(id=schema_id).one()
-    return render_template('vote/mobi/vote.html', schema=schema)
+    if schema == None:
+        return render_template('vote/error.html', title=u'错误', message=u'您选择的投票不存在')
+    items = db_session.query(Vote_item, Vote_action.item_id).outerjoin(Vote_action,
+                                                                       Vote_action.item_id == Vote_item.id).filter(
+        and_(Vote_item.schema_id == schema.id)).all()
+
+    return render_template('vote/mobi/vote.html', schema=schema, openid=openid, items=items)
 
 
 @app.route('/mobi/vote/submit', methods=['POST'])
 def submitVote():
-    session.has_key('openid')
-    data = request.data
-    return 'success'
+    if not session.has_key('openid'):
+        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份')
+    try:
+        openid = session['openid']
+        data = request.data
+        json = simplejson.loads(data)
+        actions = list()
+
+        for selectItem in json['selectItems']:
+            action = Vote_action(openid=json['openid'], item_id=int(selectItem), schema_id=json['schema_id'],
+                                 voteDate=unicode(datetime.utcnow()))
+            actions.append(action)
+
+        oldactions = db_session.query(Vote_action).filter(
+            and_(Vote_action.openid == openid, Vote_action.schema_id == json['schema_id'])).all()
+
+        for oldaction in oldactions:
+            db_session.delete(oldaction)
+
+        db_session.add_all(actions)
+        db_session.commit()
+        return str(openid)
+    except BaseException, e:
+        print e.message
+        return 'error'
 
 
 def makeUrl(src):

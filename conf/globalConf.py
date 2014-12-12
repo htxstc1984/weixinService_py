@@ -16,6 +16,7 @@ mysqldb = dict(
             )
 
 SQLALCHEMY_DATABASE_URI = 'mysql://root:root@172.16.10.170:3306/weixin_py?charset=utf8'
+EHR_WSDL_URI = 'http://172.16.10.107/uapws/service/nc.ws.intf.IPsnService?wsdl'
 
 nosqldb = dict(
                 driverName='mongo',

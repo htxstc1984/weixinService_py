@@ -6,8 +6,28 @@ Created on '2014/12/3'
 '''
 
 from sqlalchemy.ext.declarative import DeclarativeMeta
+from sqlalchemy.types import *
 from json import *
 from datetime import *
+from globalVars import *
+
+
+class MetaTransform():
+    @classmethod
+    def getStrInstance(cls, **kwargs):
+        newkvaggs = dict()
+        columns = db.metadata.tables[cls.__tablename__].columns
+        for k, v in kwargs.iteritems():
+            if isinstance(v, list):
+                v = v[0]
+            if columns.has_key(k):
+                if isinstance(columns[k].type, Integer) or isinstance(columns[k].type, BigInteger) or isinstance(
+                        columns[k].type, SmallInteger):
+                    if not v.strip() == '':
+                        newkvaggs[k] = int(v.strip())
+                else:
+                    newkvaggs[k] = v
+        return cls(**newkvaggs)
 
 
 class CJsonEncoder(JSONEncoder):
@@ -17,7 +37,7 @@ class CJsonEncoder(JSONEncoder):
         elif isinstance(obj, datetime.datedate):
             return obj.strftime('%Y-%m-%d')
         else:
-            return json.JSONEncoder.default(self, obj)
+            return JSONEncoder.default(self, obj)
 
 
 def dict2JsonStr(obj):
@@ -51,10 +71,10 @@ def sa_obj_to_dict(obj, filtrate=None, rename=None):
             fields = dict(map(lambda c: (c.name, getattr(obj, c.name)), columns))
         # fields = dict([(c.name, getattr(obj, c.name)) for c in obj.__table__.columns])
         if rename and isinstance(rename, dict):
-            #先移除key和value相同的项
+            # 先移除key和value相同的项
             _rename = dict(filter(lambda (k, v): str(k) != str(v), rename.iteritems()))
-            #如果原始key不存在，那么新的key对应的值默认为None
-            #如果新的key已存在于原始key中，那么原始key的值将被新的key的值覆盖
+            # 如果原始key不存在，那么新的key对应的值默认为None
+            # 如果新的key已存在于原始key中，那么原始key的值将被新的key的值覆盖
             # map(lambda (k, v): fields.setdefault(v, fields.pop(k, None)), _rename.iteritems())
             map(lambda (k, v): fields.update({v: fields.pop(k, None)}), _rename.iteritems())
         #
