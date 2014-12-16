@@ -105,7 +105,7 @@ def showImage(schema_id=None):
 
 @app.route('/mobi/vote/<schema_id>/<openid>')
 def getVote(schema_id=None, openid=None):
-    if openid == None:
+    if openid == None or openid == '':
         if session.has_key('openid'):
             openid = session.get('openid')
         else:

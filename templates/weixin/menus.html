@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>员工查询</title>
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+    {#    body {#}
+    {#        margin: 0;#}
+    {#        position: relative;#}
+    {#        width: 100%;#}
+    {#        height: 100%;#}
+    {#    }#}
+    {##}
+    {#    .container {#}
+    {#        position: relative;#}
+    {#        padding-right: 15px;#}
+    {#        padding-left: 15px;#}
+    {#        padding-top: 30px;#}
+    {#        margin-right: auto;#}
+    {#        margin-left: auto#}
+    {#    }#}
+
+    .container {
+        padding-top: 20px;
+    }
+
+    .menu {
+        float: left;
+        width: 104px;
+        height: 107px;
+        text-align: center;
+    {#        line-height: 107px;#}
+    }
+
+    .menu img {
+    {#        border: solid #0000ff 1px;#} border-radius: 5px;
+        width: 50%;
+    }
+
+    .menu span {
+        font-size: medium;
+        color: brown
+    }
+</style>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                data-target="#funMenus">
+            <span class="sr-only">切换导航</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">功能菜单</a>
+    </div>
+    <div class="collapse navbar-collapse" id="funMenus">
+        <ul class="nav navbar-nav">
+            <li style="text-align: center"><a href="#">取消认证</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <div class="menu">
+        <img src="/static/image/ygzq.png"><br>
+        <span><strong>电话表</strong></span>
+    </div>
+    <div class="menu">
+        <img src="/static/image/query.png"><br>
+        <span><strong>投票</strong></span>
+    </div>
+    <div class="menu">
+        <img src="/static/image/query.png"><br>
+        <span><strong>投票</strong></span>
+    </div>
+</div>
+</body>
+</html>

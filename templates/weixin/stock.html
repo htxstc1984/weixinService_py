@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://cdn.bootcss.com/jquery-mobile/1.3.2/jquery.mobile.min.css" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/jquery-mobile/1.3.2/jquery.mobile.min.js"></script>
+    <script src="/static/js/weixin/comm.js"></script>
+    <style>
+        #bodybg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0px;
+            top: 0px;
+            z-index: 0;
+        }
+
+        #bodybg .stretch {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div data-role="page" data-theme="e">
+    <div data-role="header">
+        <h1>国贸实时股价</h1>
+    </div>
+    <!-- /header -->
+
+    <div data-role="content">
+        <div data-role="collapsible" data-collapsed="false">
+            　 <h3>实时价格</h3>
+            　 <p>【aa】价格为:aa</p>
+        </div>
+        <div data-role="collapsible" data-collapsed="false" style="text-align: center">
+            　 <h3>趋势图</h3>
+            　<img width="90%"
+                  height="60%"
+                  src="http://bdchart.hexun.com/stock/chart/sf/0/600755.png">
+        </div>
+    </div>
+    <!-- /content -->
+</div>
+
+<!-- /page -->
+</body>
+</html>

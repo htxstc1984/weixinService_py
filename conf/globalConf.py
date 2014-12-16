@@ -16,6 +16,9 @@ mysqldb = dict(
             )
 
 SQLALCHEMY_DATABASE_URI = 'mysql://root:root@172.16.10.170:3306/weixin_py?charset=utf8'
+
+SQLALCHEMY_DATABASE_URI_MMS = 'mysql://OATEST:123456789@59.57.246.61:3306/mas?charset=gb2312'
+
 EHR_WSDL_URI = 'http://172.16.10.107/uapws/service/nc.ws.intf.IPsnService?wsdl'
 
 nosqldb = dict(

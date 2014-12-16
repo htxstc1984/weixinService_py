@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>电话表查询</title>
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+    .container {
+        margin-top: 20px;
+    }
+</style>
+<body>
+<div class="container">
+    <div class="col-lg-6">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="请输入搜索条件：姓名或者号码" id="cond">
+               <span class="input-group-btn">
+                  <button class="btn btn-info" type="button" id="query_submit">
+                      Go!
+                  </button>
+               </span>
+        </div>
+    </div>
+    <div class="col-lg-6" style="margin-top: 5px">
+        <div class="panel-group" id="accordion">
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#query_submit').click(function () {
+            var condval = $('#cond').val()
+            $.post('/itg/query/get', {
+                cond: condval
+            }, function (data) {
+                eval('var rs = data')
+                if (rs.code == 0) {
+                    $('#accordion').empty()
+                    $(rs.psn).each(function (i, e) {
+                        html = createPsnNode(this, i)
+                        $('#accordion').append(html)
+                    })
+                } else {
+                    alert(rs.msg)
+                }
+
+            })
+        });
+    })
+    function createPsnNode(psn, index) {
+        var html = "";
+        html += "<div class='panel panel-warning'>";
+        html += "<div class='panel-heading'>";
+        html += "<h4 class='panel-title'>";
+        html += "<a data-toggle='collapse' data-parent='#accordion' href='#collapse" + index + "'>";
+        html += psn.psnname + "  [点击展开]";
+        html += "</a>";
+        html += "</h4>";
+        html += "</div>";
+        html += "<div id='collapse" + index + "' class='panel-collapse collapse " + ((index == 0) ? " in " : "") + "'>";
+        html += "<div class='panel-body'>";
+
+        html += "<table class='table table-striped'>";
+        html += "<tbody>";
+
+
+        html += "<tr>";
+        html += "<td>公司</td>";
+        html += "<td>" + psn.unitname + "</td>";
+        html += "</tr>";
+        html += "<tr>";
+        html += "<td>部门</td>";
+        html += "<td>" + psn.deptname + "</td>";
+        html += "</tr>";
+        html += "<tr>";
+        html += "<td>email</td>";
+        html += "<td>" + psn.email + "</td>";
+        html += "</tr>";
+        html += "<tr>";
+        if (psn.yglb != "0001V410000000001OPY") {
+            html += "<td>办公电话</td>";
+            html += "<td>" + psn.officephone + "</td>";
+            html += "</tr>";
+            html += "<tr>";
+            html += "<td>手机</td>";
+            html += "<td>" + psn.mobile + "</td>";
+            html += "</tr>";
+        }
+
+        html += "</tbody>";
+        html += "</table>";
+        html += "</div>";
+        html += "</div>";
+        html += "</div>";
+
+        return html
+    }
+</script>
+</body>
+</html>

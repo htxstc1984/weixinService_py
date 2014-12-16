@@ -10,6 +10,7 @@ from sqlalchemy.types import *
 from json import *
 from datetime import *
 from globalVars import *
+from sqlalchemy import *
 
 
 class MetaTransform():

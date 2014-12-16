@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>员工认证</title>
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+{#    <script src="/static/js/vote-boots/js/bootstrap.min.js"></script>#}
+{#    <link href="/static/js/vote-boots/css/bootstrap.min.css" rel="stylesheet">#}
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+    .btn-info.active {
+        background-color: #003333;
+    }
+{#    .container{#}
+{#        padding-top: 20px;#}
+{#        padding-left: 20px;#}
+{#        padding-right: 20px;#}
+{#    }#}
+</style>
+<body>
+<div class="container">
+    <form class="form-horizontal" role="form">
+        <div style="text-align: center;margin-top: 10%">
+            <img src="/static/image/logo1.jpg"
+                 class="img-thumbnail">
+        </div>
+
+        <div class="form-group" style="margin-top: 20px">
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="condfld"
+                       placeholder="请输入E-HR保存的手机号码或者邮箱">
+            </div>
+        </div>
+
+
+        <div class="form-group" style="float: right">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button id="btn_reg" type="button" class="btn btn-info">认 证</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- 详情框 -->
+    <div class="modal fade" id="mmsModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                    <input type="text" class="form-control" id="return_mms"
+                           placeholder="请输入收到的短信验证码">
+                </div>
+                <div class="modal-footer">
+                    <button id="btn_mms_submit" type="button" class="btn btn-info"
+                            data-dismiss="modal">提交
+                    </button>
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">关闭
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('input[type="radio"]:checked').parent('label').addClass('active');
+        $('#btn_reg').click(function () {
+            var reg_type = '';
+            var cond = $('#condfld').val()
+            if (cond == '') {
+                alert('请输入手机号或者邮箱地址');
+                return;
+            }
+            if (!/^(((13[0-9]{1})|(15[0-9]{1}))+\d{8})$/.test(cond)) {
+                if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(cond)) {
+                    alert("请填写您正确的手机号或者email地址!");
+                    return;
+                } else {
+                    reg_type = 'email'
+                }
+            } else {
+                reg_type = 'mms'
+            }
+            $(this).button('loading');
+            $.post('/reg/submit', {
+                type: reg_type,
+                cond: cond
+            }, function (data) {
+                eval("var rs = data")
+                if (rs.code == 0) {
+                    if (rs.type == 'mms') {
+                        $('#mmsModal').modal()
+                    } else {
+                        alert(rs.msg);
+                        $('#btn_reg').button('reset');
+                    }
+                } else {
+                    alert(rs.msg);
+                    $(this).button();
+                }
+            })
+        })
+
+        $('#btn_mms_submit').click(function () {
+            var mmscode = $('#return_mms').val()
+            if (mmscode == '' || mmscode.length != 6) {
+                alert('验证码长度错误')
+                return false
+            }
+            $.post('/reg/checkmms', {
+                mmscode: mmscode
+            }, function (data) {
+                if (data == '0') {
+                    alert('认证成功，请返回选择其他操作');
+                    $('#mmsModal').modal('hide');
+                    $('#btn_reg').button('reset');
+                } else {
+                    alert('验证码错误或者校验码已经过期,请重新认证');
+                    $('#mmsModal').modal('hide');
+                    $('#btn_reg').button('reset');
+                    return false
+                }
+            })
+        })
+    })
+</script>
+</body>
+</html>
