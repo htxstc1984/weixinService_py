@@ -51,11 +51,6 @@ def getStock():
     return render_template('weixin/stock.html')
 
 
-@app.route('/menus')
-def getMenus():
-    return render_template('weixin/menus.html')
-
-
 @app.route('/register/<openid>')
 def getRegister(openid=None):
     if openid == None or openid == '':
@@ -125,6 +120,23 @@ def sendmms(phone, mmscode):
         return e.message
 
 
+@app.route('/itg/menus/<openid>')
+def getMenusNS(openid=None):
+    session.pop('openid')
+    rs = checkOpenid(openid)
+    if rs['resultCode'] != 0:
+        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份')
+    session['openid'] = openid
+    return render_template('weixin/menus.html')
+
+
+@app.route('/itg/menus')
+def getMenus():
+    if not session.has_key('openid'):
+        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
+    return render_template('weixin/menus.html')
+
+
 @app.route('/itg/query')
 def getQuery():
     if not session.has_key('openid'):
@@ -146,6 +158,7 @@ def getPsnInfos():
     assert isinstance(resp, Response)
     resp.headers = Headers({'Content-type': 'application/json'})
     return resp
+
 
 @app.route('/weixinrec', methods=['GET', 'POST'])
 def weixinrec():

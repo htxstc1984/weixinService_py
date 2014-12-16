@@ -12,54 +12,54 @@ groups = dict(
     g1=dict(
         name='summary',
         title='欢迎关注厦门国贸',
-        picurl='http://59.57.246.46/WeixinService/image/logo4.jpg'
+        picurl='http://59.57.246.46/static/image/logo4.jpg'
     ),
     g2=dict(
         name='employee',
         title='欢迎关注厦门国贸',
-        picurl='http://59.57.246.46/WeixinService/image/logo4.jpg'
+        picurl='http://59.57.246.46/static/image/logo4.jpg'
     )
 )
 
 menus = dict(
     m1001=dict(
         title='国贸概况',
-        picurl='http://59.57.246.46/WeixinService/image/gmgl2.png',
-        url='http://59.57.246.46/WeixinService/getSummary.html#mp.weixin.qq.com',
+        picurl='http://59.57.246.46/static/image/gmgl2.png',
+        url='http://59.57.246.46/summary#mp.weixin.qq.com',
         group=groups['g1'],
         index=1
     ),
     m1002=dict(
         title='经营业务',
-        picurl='http://59.57.246.46/WeixinService/image/jyyw.png',
-        url='http://59.57.246.46/WeixinService/business.html#mp.weixin.qq.com',
+        picurl='http://59.57.246.46/static/image/jyyw.png',
+        url='http://59.57.246.46/business#mp.weixin.qq.com',
         group=groups['g1'],
         index=2
     ),
     m1003=dict(
         title='国贸新闻',
-        picurl='http://59.57.246.46/WeixinService/image/gmxw.png',
+        picurl='http://59.57.246.46/static/image/gmxw.png',
         url='http://59.57.246.46/WeixinService/getNews.html#mp.weixin.qq.com',
         group=groups['g1'],
         index=3
     ),
     m1004=dict(
         title='员工认证',
-        picurl='http://59.57.246.46/WeixinService/image/ygzq.png',
-        url='http://59.57.246.46/WeixinService/register.html?openid=%s',
+        picurl='http://59.57.246.46/static/image/ygzq.png',
+        url='http://59.57.246.46/register/%s',
         group=groups['g2'],
         index=4
     ),
     m1005=dict(
-        title='通讯录查询',
-        picurl='http://59.57.246.46/WeixinService/image/query.png',
+        title='员工专区',
+        picurl='http://59.57.246.46/static/image/query.png',
         url='http://59.57.246.46/WeixinService/query.html?openid=%s',
         group=groups['g2'],
         index=5
     ),
     m1006=dict(
         title='国贸股价',
-        picurl='http://59.57.246.46/WeixinService/image/gmgj.png',
+        picurl='http://59.57.246.46/static/image/gmgj.png',
         url='http://59.57.246.46/WeixinService/getStock.html#mp.weixin.qq.com',
         group=groups['g1'],
         index=6

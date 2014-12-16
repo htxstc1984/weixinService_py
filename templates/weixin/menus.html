@@ -67,17 +67,22 @@
 </nav>
 <div class="container">
     <div class="menu">
-        <img src="/static/image/ygzq.png"><br>
+        <img src="/static/image/ygzq.png" id="img_ygzq"><br>
         <span><strong>电话表</strong></span>
     </div>
     <div class="menu">
         <img src="/static/image/query.png"><br>
         <span><strong>投票</strong></span>
     </div>
-    <div class="menu">
-        <img src="/static/image/query.png"><br>
-        <span><strong>投票</strong></span>
-    </div>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#img_ygzq').click(function () {
+            location.href = '/itg/query'
+        })
+    })
+
+</script>
 </body>
 </html>
