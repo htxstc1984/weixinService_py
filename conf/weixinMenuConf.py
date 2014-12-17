@@ -43,24 +43,24 @@ menus = dict(
         group=groups['g1'],
         index=3
     ),
-    m1004=dict(
-        title='员工认证',
-        picurl='http://59.57.246.46/static/image/ygzq.png',
-        url='http://59.57.246.46/register/%s',
-        group=groups['g2'],
-        index=4
-    ),
+    # m1004=dict(
+    #     title='员工认证',
+    #     picurl='http://59.57.246.46/static/image/ygzq.png',
+    #     url='http://59.57.246.46/register/%s',
+    #     group=groups['g2'],
+    #     index=4
+    # ),
     m1005=dict(
         title='员工专区',
         picurl='http://59.57.246.46/static/image/query.png',
-        url='http://59.57.246.46/WeixinService/query.html?openid=%s',
+        url='http://59.57.246.46/itg/menus/%s',
         group=groups['g2'],
         index=5
     ),
     m1006=dict(
         title='国贸股价',
         picurl='http://59.57.246.46/static/image/gmgj.png',
-        url='http://59.57.246.46/WeixinService/getStock.html#mp.weixin.qq.com',
+        url='http://59.57.246.46/stock#mp.weixin.qq.com',
         group=groups['g1'],
         index=6
     )
@@ -74,22 +74,22 @@ buttons = dict(
                 dict(
                     type='view',
                     name='国贸概况',
-                    url='http://59.57.246.46/WeixinService/getSummary.html#mp.weixin.qq.com'
+                    url='http://59.57.246.46/summary'
                 ),
                 dict(
                     type='view',
                     name='经营业务',
-                    url='http://59.57.246.46/WeixinService/business.html#mp.weixin.qq.com'
+                    url='http://59.57.246.46/business'
                 ),
                 dict(
                     type='view',
                     name='国贸新闻',
-                    url='http://59.57.246.46/WeixinService/getNews.html#mp.weixin.qq.com'
+                    url='http://59.57.246.46/news/list/0'
                 ),
                 dict(
                     type='view',
                     name='国贸股价',
-                    url='http://59.57.246.46/WeixinService/getStock.html#mp.weixin.qq.com'
+                    url='http://59.57.246.46/stock'
                 ),
             ]
         ),
@@ -101,7 +101,7 @@ buttons = dict(
         dict(
             type='view',
             name='微信链接',
-            url='http://59.57.246.46/WeixinService/getLinks.html'
+            url='http://59.57.246.46/links'
         )
     ]
 )

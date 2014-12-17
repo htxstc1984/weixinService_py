@@ -30,7 +30,7 @@ def test(url):
         content += '<CreateTime>1348831860</CreateTime>'
         content += '<MsgType><![CDATA[event]]></MsgType>'
         content += '<Event><![CDATA[CLICK]]></Event>'
-        content += '<EventKey><![CDATA[summary]]></EventKey>'
+        content += '<EventKey><![CDATA[employee]]></EventKey>'
         # + "<Content><![CDATA[投票]]></Content>"
         # + "<MsgId>1234567890123456</MsgId>"
         content += '</xml>'
@@ -51,7 +51,7 @@ def test(url):
 
 
 if __name__ == '__main__':
-    print test("http://172.16.109.105:8088/weixinrec")
+    print test("http://localhost:8088/weixinrec")
     # print test('http://59.57.246.46/WeixinService/weixinrec.html')
     # print test('http://172.16.109.105:8080/WeixinService/weixinrec.html')
     pass

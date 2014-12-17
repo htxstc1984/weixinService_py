@@ -247,7 +247,8 @@ def weixinrec():
                             menuitem.appendChild(itemTitle)
 
                             itemUrl = doc.createElement('Url')
-                            itemUrl.appendChild(doc.createTextNode('<![CDATA[' + menu['url'] + ']]>'))
+                            itemUrl.appendChild(
+                                doc.createTextNode('<![CDATA[' + (menu['url'] % vo['FromUserName']) + ']]>'))
                             menuitem.appendChild(itemUrl)
 
                             itemPicUrl = doc.createElement('PicUrl')
