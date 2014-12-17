@@ -25,6 +25,7 @@ def checkOpenid(openid):
 
 def getPsnPhoneVOs(openid, cond):
     localClient = copy.copy(client)
+    # print localClient
     result = localClient.service.getPsnPhoneVOs(openid, cond)
     i = unicode(result).find(u'您无此操作权限')
     if not i == -1:
@@ -36,6 +37,12 @@ def getPsnPhoneVOs(openid, cond):
 def bindWeixin(cond, type, openid):
     localClient = copy.copy(client)
     result = localClient.service.bindWeixin(cond, type, openid)
+    return result
+
+
+def unbindWeixin(openid):
+    localClient = copy.copy(client)
+    result = localClient.service.unbindWeixin(openid)
     return result
 
 

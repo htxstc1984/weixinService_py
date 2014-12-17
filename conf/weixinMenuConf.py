@@ -39,7 +39,7 @@ menus = dict(
     m1003=dict(
         title='国贸新闻',
         picurl='http://59.57.246.46/static/image/gmxw.png',
-        url='http://59.57.246.46/WeixinService/getNews.html#mp.weixin.qq.com',
+        url='http://59.57.246.46/news/list/0',
         group=groups['g1'],
         index=3
     ),

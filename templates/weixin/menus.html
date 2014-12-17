@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html>
+{% if redirectflag==1 %}
+    <script type="text/javascript">
+        location.href = '/register/{&openid&}';
+    </script>
+{% endif %}
+
 <head lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -61,7 +67,7 @@
     </div>
     <div class="collapse navbar-collapse" id="funMenus">
         <ul class="nav navbar-nav">
-            <li style="text-align: center"><a href="#">取消认证</a></li>
+            <li style="text-align: center"><a id="btn_rm" href="javascript:removeRegister()">取消认证</a></li>
         </ul>
     </div>
 </nav>
@@ -83,6 +89,16 @@
         })
     })
 
+    function removeRegister() {
+        $.post('/reg/delete', {}, function (data) {
+            if (data == '0') {
+                alert('解除认证成功')
+                window.close()
+            } else {
+                alert('解除认证失败')
+            }
+        })
+    }
 </script>
 </body>
 </html>

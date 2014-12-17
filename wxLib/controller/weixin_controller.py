@@ -8,7 +8,7 @@ Created on '2014/12/12'
 from flask.templating import render_template
 import json
 from flask import make_response
-from flask import request
+from flask import request, url_for, redirect
 from werkzeug.wrappers import Response, Headers
 import simplejson
 from wxLib.meta.voteMeta import *
@@ -23,6 +23,8 @@ import pycurl, StringIO
 import time, pickle
 from sqlalchemy import *
 from wxLib.meta.mmsMeta import *
+from wxLib.meta.itgcmsMeta import *
+import re
 
 
 @app.route('/imageView/<src>')
@@ -49,6 +51,23 @@ def getLinks():
 @app.route('/stock')
 def getStock():
     return render_template('weixin/stock.html')
+
+
+@app.route('/news/list/<int:page>')
+def getNewsIndex(page=0):
+    queryIndex = session_cms.query(SwInfo.infoid, SwInfo.infotitle, SwInfo.infodatetime, SwInfo.columnid).filter(
+        and_(SwInfo.infoisdisplay == '1', SwInfo.columnid.in_((2, 3)))).order_by(
+        desc(SwInfo.infodatetime)).offset(page * 10).limit(10)
+    newsList = queryIndex.all()
+    return render_template('weixin/itgNews.html', newsList=newsList, page=page)
+
+
+@app.route('/news/get/<int:infoid>')
+def getNewsBody(infoid=None):
+    query = session_cms.query(SwInfo).filter(and_(SwInfo.infoisdisplay == '1', SwInfo.infoid == infoid))
+    newsBody = query.one()
+    newsBody.infocontent = getRightHtml(newsBody.infocontent)
+    return render_template('weixin/newsView.html', newsBody=newsBody)
 
 
 @app.route('/register/<openid>')
@@ -102,6 +121,15 @@ def checkmms():
     return str(retcode)
 
 
+@app.route('/reg/delete', methods=['POST'])
+def deleteRegister():
+    if not session.has_key('openid'):
+        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
+    openid = session['openid']
+    code = unbindWeixin(openid)
+    return str(code)
+
+
 def sendmms(phone, mmscode):
     try:
         conn = getMMSDBConn()
@@ -122,10 +150,11 @@ def sendmms(phone, mmscode):
 
 @app.route('/itg/menus/<openid>')
 def getMenusNS(openid=None):
-    session.pop('openid')
+    if session.has_key('openid'):
+        session.pop('openid')
     rs = checkOpenid(openid)
     if rs['resultCode'] != 0:
-        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份')
+        return redirect(url_for('/register/' + openid))
     session['openid'] = openid
     return render_template('weixin/menus.html')
 
@@ -134,7 +163,13 @@ def getMenusNS(openid=None):
 def getMenus():
     if not session.has_key('openid'):
         return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
-    return render_template('weixin/menus.html')
+    request.base_url
+    openid = session['openid']
+    rs = checkOpenid(openid)
+    redirectflag = 0
+    if rs['resultCode'] != 0:
+        redirectflag = 1
+    return render_template('weixin/menus.html', redirectflag=redirectflag, openid=openid)
 
 
 @app.route('/itg/query')
@@ -273,6 +308,20 @@ def getAccessToken():
 
     result = loads(backinfo)
     return result['access_token']
+
+
+def getRightHtml(content):
+    rgExp1 = re.compile("(<[Ii][Mm][Gg].+?src=['|\"](?!http))")
+    items = rgExp1.findall(content)
+    items = set(items)
+    for item in items:
+        content = rgExp1.sub(item + u'http://www.itg.com.cn', content)
+    rgExp2 = re.compile("(<v:imagedata.+?src[\\s]*=[\\s]*['|\"](?!http))")
+    items = rgExp2.findall(content)
+    items = set(items)
+    for item in items:
+        content = rgExp2.sub(item + u'http://www.itg.com.cn', content)
+    return content
 
 
 if __name__ == '__main__':

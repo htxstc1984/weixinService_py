@@ -52,6 +52,10 @@
     $(function () {
         $('#query_submit').click(function () {
             var condval = $('#cond').val()
+            if (condval == '') {
+                alert('请输入查询条件')
+                return
+            }
             $.post('/itg/query/get', {
                 cond: condval
             }, function (data) {
