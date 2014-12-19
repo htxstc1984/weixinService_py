@@ -46,6 +46,12 @@ def unbindWeixin(openid):
     return result
 
 
+def confirmBind(code):
+    localClient = copy.copy(client)
+    result = localClient.service.confirmBind(code)
+    return result
+
+
 def confirmBindMMS(mmscode, openid):
     localClient = copy.copy(client)
     result = localClient.service.confirmBindMMS(mmscode, openid)

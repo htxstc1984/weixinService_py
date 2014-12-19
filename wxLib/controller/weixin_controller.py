@@ -5,13 +5,14 @@ Created on '2014/12/12'
 @author: 'hu'
 '''
 
+from flask import session
 from flask.templating import render_template
 import json
 from flask import make_response
 from flask import request, url_for, redirect
 from werkzeug.wrappers import Response, Headers
 import simplejson
-from wxLib.meta.voteMeta import *
+from wxLib.meta.weixinMeta import *
 from wxLib.utils import *
 from wxLib.callws.ehr import *
 from sqlalchemy import and_, or_, func
@@ -101,9 +102,10 @@ def confirmRegister():
 
     if type == 'email':
         if code == 0:
+
             ret = dumps(dict(code=0, type='email', msg='已经向您的国贸邮箱发送认证邮件，请进入邮箱确认!'))
         else:
-            ret = dumps(dict(code=code, msg=errors['e' + code]))
+            ret = dumps(dict(code=code, msg=errors['e' + str(code)]))
 
     resp = make_response(ret)
     assert isinstance(resp, Response)
@@ -121,6 +123,20 @@ def checkmms():
     return str(retcode)
 
 
+@app.route('/reg/checkemail/<uid>')
+def checkemail(uid=None):
+    return render_template('weixin/checkemail.html', code=uid)
+
+
+@app.route('/reg/email/bind/<code>')
+def bindemail(code=None):
+    rs = confirmBind(code)
+    if rs == 0:
+        return render_template('vote/error.html', title=u'温馨提示', message=u'欢迎您，请使用微信平台为国贸员工定制的信息服务！')
+    else:
+        return render_template('vote/error.html', title=u'错误', message=u'验证失败，您的邮件可能已经过期，请重新认证')
+
+
 @app.route('/reg/delete', methods=['POST'])
 def deleteRegister():
     if not session.has_key('openid'):
@@ -133,8 +149,8 @@ def deleteRegister():
 def sendmms(phone, mmscode):
     try:
         conn = getMMSDBConn()
-        msg = '您的国贸微信平台认证码是：' + mmscode[1:len(mmscode)] + ',请在微信平台输入此验证码.'
-        sql = "insert into api_mt_BBB(mobiles,content,is_wap) values('%s','%s',0) " % (str(phone), msg)
+        msg = u'您的国贸微信平台认证码是：' + unicode(mmscode[1:len(mmscode)]) + u',请在微信平台输入此验证码.'
+        sql = "insert into api_mt_BBB(mobiles,content,is_wap) values('%s','%s',0) " % (str(phone), msg.encode('gb2312'))
         print sql
         cursor = conn.cursor()
         n = cursor.execute(sql)
@@ -154,22 +170,20 @@ def getMenusNS(openid=None):
         session.pop('openid')
     rs = checkOpenid(openid)
     if rs['resultCode'] != 0:
-        return redirect(url_for('/register/' + openid))
+        return redirect(url_for('getRegister', openid=openid))
     session['openid'] = openid
-    return render_template('weixin/menus.html')
+    return render_template('weixin/menus.html', openid=openid)
 
 
 @app.route('/itg/menus')
 def getMenus():
     if not session.has_key('openid'):
         return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
-    request.base_url
     openid = session['openid']
     rs = checkOpenid(openid)
-    redirectflag = 0
     if rs['resultCode'] != 0:
-        redirectflag = 1
-    return render_template('weixin/menus.html', redirectflag=redirectflag, openid=openid)
+        return redirect(url_for('getRegister', openid=openid))
+    return render_template('weixin/menus.html', openid=openid)
 
 
 @app.route('/itg/query')

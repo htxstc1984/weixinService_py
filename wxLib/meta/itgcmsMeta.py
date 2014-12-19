@@ -10,7 +10,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker, query
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import and_, or_, func
 
-engine_cms = create_engine(SQLALCHEMY_DATABASE_URI_CMS, pool_size=15)
+engine_cms = create_engine(SQLALCHEMY_DATABASE_URI_CMS)
 session_cms = scoped_session(sessionmaker(bind=engine_cms, autocommit=False, autoflush=False))
 Base = declarative_base()
 
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     # assert isinstance(cursor,)
     # query = session_cms.query(SwInfo).with_entities(SwInfo.infoid, SwInfo.infotitle, SwInfo.infodatetime).filter(
     # and_(SwInfo.infoisdisplay == '1', SwInfo.columnid.in_((2, 3)))).order_by(
-    #     desc(SwInfo.infodatetime)).offset(0).limit(10)
+    # desc(SwInfo.infodatetime)).offset(0).limit(10)
     # result = query.all()
     # for v in result:
     #     print v.infocontent

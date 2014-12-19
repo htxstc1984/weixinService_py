@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>确认绑定</title>
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<script type="text/javascript">
+    function auth() {
+        window.location = "/reg/email/bind/{&code&}";
+    }
+</script>
+<div class="container">
+    <div class="jumbotron">
+        <h1>再次确认</h1>
+
+        <p>您好,请确认是否进行微信平台认证:</p>
+
+        <p><a class="btn btn-primary btn-lg" role="button" href="javascript:auth()">
+            确认</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>

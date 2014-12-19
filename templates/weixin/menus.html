@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html>
-{% if redirectflag==1 %}
-    <script type="text/javascript">
-        location.href = '/register/{&openid&}';
-    </script>
-{% endif %}
+
 
 <head lang="en">
     <meta charset="UTF-8">
@@ -73,11 +69,11 @@
 </nav>
 <div class="container">
     <div class="menu">
-        <img src="/static/image/ygzq.png" id="img_ygzq"><br>
+        <img src="/static/image/icon/icon_addr.png" id="img_ygzq"><br>
         <span><strong>电话表</strong></span>
     </div>
     <div class="menu">
-        <img src="/static/image/query.png"><br>
+        <img src="/static/image/icon/ico_vote.png"><br>
         <span><strong>投票</strong></span>
     </div>
 </div>
@@ -90,14 +86,16 @@
     })
 
     function removeRegister() {
-        $.post('/reg/delete', {}, function (data) {
-            if (data == '0') {
-                alert('解除认证成功')
-                window.close()
-            } else {
-                alert('解除认证失败')
-            }
-        })
+        if (window.confirm('是否确定解除认证')) {
+            $.post('/reg/delete', {}, function (data) {
+                if (data == '0') {
+                    alert('解除认证成功')
+                    window.location.reload()
+                } else {
+                    alert('解除认证失败')
+                }
+            })
+        }
     }
 </script>
 </body>

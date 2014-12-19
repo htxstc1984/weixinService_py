@@ -4,6 +4,7 @@ Created on '2014/12/2'
 
 @author: 'hu'
 '''
+from flask import session
 from flask.templating import render_template
 from json import *
 from flask import make_response
@@ -11,7 +12,7 @@ from flask import request
 from werkzeug.wrappers import Response, Headers
 from werkzeug.utils import secure_filename
 import simplejson
-from wxLib.meta.voteMeta import *
+from wxLib.meta.weixinMeta import *
 from wxLib.utils import *
 from wxLib.callws.ehr import *
 from sqlalchemy import and_, or_, func
@@ -25,7 +26,7 @@ def voteSetting():
 
 @app.route('/getTree', methods=['GET', 'POST'])
 def getschematree():
-    schemas = Vote_schema.query.all()
+    schemas = wx_session.query(Vote_schema).all()
     resp = make_response(createTree(schemas))
     assert isinstance(resp, Response)
     resp.headers = Headers({'Content-type': 'application/json'})
@@ -34,7 +35,7 @@ def getschematree():
 
 @app.route('/schema/view/<schema_id>', methods=['GET', 'POST'])
 def getVoteItems(schema_id=None):
-    schema = Vote_schema.query.filter_by(id=schema_id).one()
+    schema = wx_session.query(Vote_schema).filter_by(id=schema_id).one()
     return render_template('vote/schemaView.html', schema=schema)
 
 
@@ -48,13 +49,13 @@ def schemaAdd():
 
 @app.route('/schema/edit/<schema_id>', methods=['GET', 'POST'])
 def schemaEdit(schema_id=None):
-    schema = Vote_schema.query.filter_by(id=schema_id).one()
+    schema = wx_session.query(Vote_schema).filter_by(id=schema_id).one()
     return render_template('vote/schemaEdit.html', schema=schema)
 
 
 @app.route('/schema/save', methods=['GET', 'POST'])
 def saveSchema():
-    schema = Vote_schema.getStrInstance(**request.form)
+    schema = Vote_schema.getStrInstance(db, **request.form)
     schema.creator = u'htx'
     schema.lastDate = unicode(datetime.utcnow())
     if (schema.id == None):
@@ -66,8 +67,8 @@ def saveSchema():
                                                                      f.filename.rfind('.'):]  # 获取一个安全的文件名，且仅仅支持ascii字符；
         f.save(ROOT_PATH + UPLOAD_FOLDER + fname)
         schema.picurl = UPLOAD_FOLDER + fname
-    db_session.merge(schema)
-    db_session.commit()
+    wx_session.merge(schema)
+    wx_session.commit()
     return "{'sucess':true}"
 
 
@@ -79,27 +80,27 @@ def addItem(schema_id=None):
 
 @app.route('/item/edit/<itemid>')
 def getItem(itemid=None):
-    item = Vote_item.query.filter_by(id=itemid).one()
+    item = wx_session.query(Vote_item).filter_by(id=itemid).one()
     return render_template('vote/itemEdit.html', item=item)
 
 
 @app.route('/item/save', methods=['GET', 'POST'])
 def saveItem():
-    item = Vote_item.getStrInstance(**request.form)
+    item = Vote_item.getStrInstance(db, **request.form)
     if request.files and request.files['picurl']:
         f = request.files['picurl']
         fname = str(datetime.utcnow().strftime('%Y%M%d_%H%M%S%f')) + f.filename[
                                                                      f.filename.rfind('.'):]  # 获取一个安全的文件名，且仅仅支持ascii字符；
         f.save(ROOT_PATH + UPLOAD_FOLDER + fname)
         item.picurl = UPLOAD_FOLDER + fname
-    db_session.merge(item)
-    db_session.commit()
+    wx_session.merge(item)
+    wx_session.commit()
     return "{'sucess':true}"
 
 
 @app.route('/showImage/<schema_id>')
 def showImage(schema_id=None):
-    schema = Vote_schema.query.filter_by(id=schema_id).one()
+    schema = wx_session.query(Vote_schema).filter_by(id=schema_id).one()
     return render_template('common/showImage.html', src=schema.picurl)
 
 
@@ -114,10 +115,10 @@ def getVote(schema_id=None, openid=None):
     if rs['resultCode'] != 0:
         return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份')
     session['openid'] = openid
-    schema = Vote_schema.query.filter_by(id=schema_id).one()
+    schema = wx_session.query(Vote_schema).filter_by(id=schema_id).one()
     if schema == None:
         return render_template('vote/error.html', title=u'错误', message=u'您选择的投票不存在')
-    items = db_session.query(Vote_item, Vote_action.item_id).outerjoin(Vote_action,
+    items = wx_session.query(Vote_item, Vote_action.item_id).outerjoin(Vote_action,
                                                                        Vote_action.item_id == Vote_item.id).filter(
         and_(Vote_item.schema_id == schema.id)).all()
 
@@ -139,14 +140,14 @@ def submitVote():
                                  voteDate=unicode(datetime.utcnow()))
             actions.append(action)
 
-        oldactions = db_session.query(Vote_action).filter(
+        oldactions = wx_session.query(Vote_action).filter(
             and_(Vote_action.openid == openid, Vote_action.schema_id == json['schema_id'])).all()
 
         for oldaction in oldactions:
-            db_session.delete(oldaction)
+            wx_session.delete(oldaction)
 
-        db_session.add_all(actions)
-        db_session.commit()
+        wx_session.add_all(actions)
+        wx_session.commit()
         return str(openid)
     except BaseException, e:
         print e.message

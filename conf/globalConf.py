@@ -4,7 +4,7 @@ Created on 2014-11-12
 
 @author: huangtx@itg.net
 '''
-
+import os
 mysqldb = dict(
                 driverName='mysql',
                 host='172.16.10.170' ,
@@ -22,6 +22,10 @@ SQLALCHEMY_DATABASE_URI_MMS = 'mysql://OATEST:123456789@59.57.246.61:3306/mas?ch
 SQLALCHEMY_DATABASE_URI_CMS = 'mssql+pymssql://itggroupcms:itggr0upcns@172.16.10.237/itggroupcmsnew'
 
 EHR_WSDL_URI = 'http://172.16.10.107/uapws/service/nc.ws.intf.IPsnService?wsdl'
+
+ROOT_PATH = os.path.dirname(__file__)
+
+UPLOAD_FOLDER = '/static/files/'
 
 nosqldb = dict(
                 driverName='mongo',

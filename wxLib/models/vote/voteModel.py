@@ -5,7 +5,7 @@ Created on '2014/12/2'
 @author: 'hu'
 '''
 
-from wxLib.meta.voteMeta import *
+from wxLib.meta.weixinMeta import *
 from datetime import datetime
 
 if __name__ == '__main__':

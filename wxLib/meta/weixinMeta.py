@@ -5,8 +5,23 @@ Created on '2014/12/3'
 @author: 'hu'
 '''
 
-from globalVars import *
 from wxLib.utils import *
+from sqlalchemy.orm import scoped_session, sessionmaker, query
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.migrate import Migrate, MigrateCommand
+from flask.ext.script import Manager
+from conf.globalConf import SQLALCHEMY_DATABASE_URI
+from flask import Flask
+from sqlalchemy.ext.declarative import declarative_base
+
+engine = create_engine(SQLALCHEMY_DATABASE_URI)
+wx_session = scoped_session(sessionmaker(autocommit=False,
+                                         autoflush=False,
+                                         bind=engine))
+
+Base = declarative_base()
+# Base.query = wx_session.query_property()
+db = SQLAlchemy()
 
 
 class Vote_schema(db.Model, Base, MetaTransform):
@@ -74,4 +89,13 @@ class Vote_action(db.Model, Base, MetaTransform):
 
 
 if __name__ == '__main__':
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+    app.config['SQLALCHEMY_ECHO'] = True
+    app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
+    db = SQLAlchemy(app)
+    migrate = Migrate(app, db)
+    manager = Manager(app)
+    manager.add_command('db', MigrateCommand)
+    manager.run()
     pass
