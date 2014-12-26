@@ -5,6 +5,7 @@ Created on '2014/12/12'
 @author: 'hu'
 '''
 
+from globalVars import *
 from flask import session
 from flask.templating import render_template
 import json
@@ -21,7 +22,7 @@ from encoder import XML2Dict
 from conf.weixinMenuConf import *
 from xml.dom import minidom
 import pycurl, StringIO
-import time, pickle
+import time as sysTime
 from sqlalchemy import *
 from wxLib.meta.mmsMeta import *
 from wxLib.meta.itgcmsMeta import *
@@ -216,7 +217,33 @@ def weixinrec():
     xml2dict = XML2Dict(coding='utf-8')
     xml = xml2dict.parse(request.data)
     vo = xml['xml']
+
+    if vo.has_key('MsgType'):
+        if vo['MsgType'] == 'text':
+            if testCommand.has_key(vo['Content']):
+                retXML = ''
+                retXML += '<xml>'
+                retXML += '<ToUserName><![CDATA[' + vo['FromUserName'] + ']]></ToUserName>'
+                retXML += '<FromUserName><![CDATA[' + vo['ToUserName'] + ']]></FromUserName>'
+                retXML += '<CreateTime>' + str(int(sysTime.time() * 1000)) + '</CreateTime>'
+                retXML += '<MsgType><![CDATA[text]]></MsgType>'
+                retXML += '<Content><![CDATA[' + (testCommand[vo['Content']] % vo['FromUserName']) + ']]></Content>'
+                retXML += '</xml>'
+                retXML = retXML.replace('&lt;', '<').replace('&gt;', '>')
+                return retXML
+
     if vo.has_key('Event') and vo.has_key('EventKey'):
+        if vo['Event'] == 'subscribe':
+            retXML = ''
+            retXML += '<xml>'
+            retXML += '<ToUserName><![CDATA[' + vo['FromUserName'] + ']]></ToUserName>'
+            retXML += '<FromUserName><![CDATA[' + vo['ToUserName'] + ']]></FromUserName>'
+            retXML += '<CreateTime>' + str(int(sysTime.time() * 1000)) + '</CreateTime>'
+            retXML += '<MsgType><![CDATA[text]]></MsgType>'
+            retXML += '<Content><![CDATA[欢迎关注厦门国贸！]]></Content>'
+            retXML += '</xml>'
+            retXML = retXML.replace('&lt;', '<').replace('&gt;', '>')
+            return retXML
         if vo['Event'] == 'CLICK':
             doc = minidom.Document()
             root = doc.createElement('xml')
@@ -230,7 +257,7 @@ def weixinrec():
             root.appendChild(fromUserName)
 
             createTime = doc.createElement('CreateTime')
-            createTime.appendChild(doc.createTextNode(str(int(time.time() * 1000))))
+            createTime.appendChild(doc.createTextNode(str(int(sysTime.time() * 1000))))
             root.appendChild(createTime)
 
             msgType = doc.createElement('MsgType')

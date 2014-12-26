@@ -44,7 +44,7 @@ menus = dict(
         index=3
     ),
     # m1004=dict(
-    #     title='员工认证',
+    # title='员工认证',
     #     picurl='http://59.57.246.46/static/image/ygzq.png',
     #     url='http://59.57.246.46/register/%s',
     #     group=groups['g2'],
@@ -123,6 +123,10 @@ errors = dict(
     e114='此验证码已经超时失效',
     e115='您输入的手机号对应的员工已经通过认证，请勿重复认证',
     e999='出现未知错误，操作失败'
+)
+
+testCommand = dict(
+    zhufu='http://59.57.246.46/collect/1/main/%s'
 )
 
 if __name__ == '__main__':

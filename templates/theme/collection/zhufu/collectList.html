@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{&title&}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/static/css/weixin/msgbar.css" rel="stylesheet">
+</head>
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    body {
+        margin: 0;
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .divHeader {
+        position: fixed;
+        background-color: red;
+        width: 100%;
+        height: 40px;
+        top: 0;
+    }
+
+    .btn_left {
+
+        display: block;
+        float: left;
+        margin-top: 20px;
+        width: 100px;
+        height: 30px;
+        top: 10px;
+        border-radius: 5px;
+        box-shadow: #666 0px 0px 10px;
+        background-color: blue
+    }
+
+    .btn_left a {
+        text-decoration: none;
+        line-height: 30px;
+    }
+
+</style>
+<script type="text/javascript">
+
+</script>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                data-target="#funMenus">
+            <span class="sr-only">切换导航</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">{&title&}</a>
+    </div>
+    <div class="collapse navbar-collapse" id="funMenus">
+        <ul class="nav navbar-nav">
+            <li style="text-align: center"><a href="/collect/{&collect_id&}/addCollect">继续留言</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    {% for item in items %}
+        <div class='status-item' id='block_232'>
+            <div class='mod'>
+                <div class='bd layout-2'>
+                    <p class='text'>{&item.createDate&} 发布：</p>
+                    <blockquote>
+                        <p>
+                            <font size='4' color='brown' style='vertical-align: top;'><strong>“</strong></font><font
+                                size='3'>{&item.content&}<font size='4' color='brown'
+                                                               style='vertical-align: bottom;'><strong>”</strong></font></font>
+                        </p>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>
+

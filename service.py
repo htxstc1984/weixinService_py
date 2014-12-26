@@ -9,7 +9,7 @@ from globalVars import *
 
 execfile(os.path.dirname(__file__) + "\\wxLib\\controller\\vote_controller.py")
 execfile(os.path.dirname(__file__) + "\\wxLib\\controller\\weixin_controller.py")
-
+execfile(os.path.dirname(__file__) + "\\wxLib\\controller\\theme_controller.py")
 
 
 if __name__ == '__main__':

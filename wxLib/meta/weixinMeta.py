@@ -4,6 +4,10 @@ Created on '2014/12/3'
 
 @author: 'hu'
 '''
+if __name__ == '__main__':
+    import sys, os
+    sys.path.insert(0, "C:/developIDE/pycharmWorksapce/weixinService_py")
+    sys.path.insert(0, "C:\developIDE\pyenvs\env3\Lib\site-packages")
 
 from wxLib.utils import *
 from sqlalchemy.orm import scoped_session, sessionmaker, query
@@ -18,10 +22,19 @@ engine = create_engine(SQLALCHEMY_DATABASE_URI)
 wx_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
-
 Base = declarative_base()
 # Base.query = wx_session.query_property()
 db = SQLAlchemy()
+
+if __name__ == '__main__':
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+    app.config['SQLALCHEMY_ECHO'] = True
+    app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
+    db = SQLAlchemy(app)
+    migrate = Migrate(app, db)
+    manager = Manager(app)
+    manager.add_command('db', MigrateCommand)
 
 
 class Vote_schema(db.Model, Base, MetaTransform):
@@ -88,14 +101,27 @@ class Vote_action(db.Model, Base, MetaTransform):
         )
 
 
+class Theme_collection(db.Model, Base, MetaTransform):
+    __tablename__ = 'theme_collection'
+    id = db.Column('id', db.Integer, autoincrement=db.Integer, primary_key=True)
+    name = db.Column('name', db.String(255), nullable=False)
+    desc = db.Column('desc', db.Text, nullable=False)
+    title = db.Column('title', db.String(255), nullable=False)
+    template_dir = db.Column('template_dir', db.String(255), nullable=False)
+
+
+class Theme_collection_item(db.Model, Base, MetaTransform):
+    __tablename__ = 'theme_collection_item'
+    id = db.Column('id', db.Integer, autoincrement=db.Integer, primary_key=True)
+    collect_id = db.Column('collect_id', db.Integer, db.ForeignKey('theme_collection.id'), primary_key=True,
+                           nullable=False)
+    openid = db.Column('openid', db.Unicode(30), nullable=False)
+    content = db.Column('content', db.Text, nullable=False)
+    mobile = db.Column('mobile', db.String(30), nullable=False)
+    psnname = db.Column('psnname', db.String(20), nullable=False)
+    createDate = db.Column('createDate', db.Unicode(30), nullable=True)
+
 if __name__ == '__main__':
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
-    app.config['SQLALCHEMY_ECHO'] = True
-    app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
-    db = SQLAlchemy(app)
-    migrate = Migrate(app, db)
-    manager = Manager(app)
-    manager.add_command('db', MigrateCommand)
+
     manager.run()
     pass

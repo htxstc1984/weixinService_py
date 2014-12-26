@@ -27,9 +27,9 @@ def getPsnPhoneVOs(openid, cond):
     localClient = copy.copy(client)
     # print localClient
     result = localClient.service.getPsnPhoneVOs(openid, cond)
-    i = unicode(result).find(u'您无此操作权限')
-    if not i == -1:
-        return dict(code=999, msg='您无此操作权限')
+    # i = unicode(result).find(u'您无此操作权限')
+    # if not i == -1:
+    #     return dict(code=999, msg='您无此操作权限')
     result = loads(result)
     return result
 
@@ -59,7 +59,7 @@ def confirmBindMMS(mmscode, openid):
 
 
 if __name__ == '__main__':
-    # print checkOpenid(u'oGWhot6q83jPLENglsitEv1xjYCw')['psnname']
-    print getPsnPhoneVOs(u'oGWhot6q83jPLENglsitEv1xjYCw', u'黄玉')
+    print checkOpenid(u'oGWhot6q83jPLENglsitEv1xjYCw')
+    # print getPsnPhoneVOs(u'oGWhot6q83jPLENglsitEv1xjYCw', u'黄玉')
 
     # print  bindWeixin('13950002585','mms','oGWhot6q83jPLENglsitEv1xjYCw')

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>我要发言</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    body {
+        margin: 0;
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .divBlock {
+        position: relative;
+        margin-top: 20px;
+        width: 70%;
+    }
+
+    .sloganContent {
+        width: 100%;
+        overflow: hidden;
+        margin-top: 20px;
+        height: 200px;
+        border: 1px black solid;
+        border-radius: 5px;
+        box-shadow: #666 0px 0px 10px;
+        resize: none;
+    }
+
+    .itemdiv {
+        width: 100%;
+        height: 36px;
+    }
+
+    /*
+    span {
+        display: block;
+        line-height: 36px;
+        float: left;
+        text-align: right;
+    }
+    */
+    .input {
+        display: block;
+        float: left;
+        width: 70%;
+        border-radius: 5px;
+        line-height: 30px;
+        box-shadow: #666 0px 0px 10px;
+    }
+
+    .btn_submit {
+        display: block;
+        float: left;
+        margin-top: 20px;
+        width: 100px;
+        height: 40px;
+        border-radius: 5px;
+        box-shadow: #666 0px 0px 10px;
+    }
+
+    .btn_reset {
+        display: block;
+        float: right;
+        margin-top: 20px;
+        width: 100px;
+        height: 40px;
+        border-radius: 5px;
+        box-shadow: #666 0px 0px 10px
+    }
+</style>
+<script type="text/javascript">
+    function check() {
+        var obj = {}
+        psnnameval = $("#psnname").val();
+        if (!psnnameval || Trim(psnnameval) == "") {
+            alert("请输入姓名");
+            return false;
+        }
+        obj.psnname = psnnameval
+        mobileval = $("#mobile").val();
+        if (!mobileval || Trim(mobileval) == "") {
+            alert("请输入手机号码");
+            return false;
+        }
+        obj.mobile = mobileval
+        contentval = $("#content").val();
+        if (!contentval || Trim(contentval) == "") {
+            alert("请输入内容");
+            return false;
+        }
+        obj.content = contentval
+        return obj;
+    }
+    function Trim(string) {
+        return string.replace(/( +)$/g, "").replace(/^( +)/g, "");
+    }
+
+    $(function () {
+        $('#btn_sub').click(function () {
+            $(this).button('loading');
+            var formdata = check()
+            if (formdata) {
+                $.post('/collect/{&collect_id&}/add/{&openid&}', formdata, function (data) {
+                    if(data=='success'){
+                        alert('发布成功');
+                        $('#content').val('');
+                        $('#btn_sub').button('reset');
+                    }
+                })
+            }
+        })
+
+    })
+
+</script>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                data-target="#funMenus">
+            <span class="sr-only">切换导航</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">我要发言</a>
+    </div>
+    <div class="collapse navbar-collapse" id="funMenus">
+        <ul class="nav navbar-nav">
+            <li style="text-align: center"><a href="/collect/{&collect_id&}/main/{&openid&}">返回首页</a></li>
+            <li style="text-align: center"><a href="/collect/{&collect_id&}/list/{&openid&}">我的发布</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <form role="form" onsubmit="return check()" id="form1">
+        {% if psn==None %}
+            <div class="form-group col-md-12">
+                <label for="psnname">请输入姓名</label>
+
+                <div><input type="text" class="form-control" name="psnname" id="psnname"></div>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="mobile">请输入手机</label>
+
+                <div><input type="text" class="form-control" name="mobile" id="mobile"></div>
+            </div>
+        {% else %}
+            <div class="form-group col-md-12">
+                <label>{&psn.psnname&}，欢迎您！</label>
+                <input type="hidden" name="psnname" value="{&psn.psnname&}" id="psnname">
+                <input type="hidden" name="mobile" value="{&psn.mobile&}" id="mobile">
+            </div>
+        {% endif %}
+
+        <div class="form-group col-md-12">
+            <div><textarea class="form-control" style="resize:none;height: 200px" required="required"
+                           placeholder="请输入您的祝福语 "
+                           name="content"
+                           id="content"></textarea></div>
+        </div>
+    </form>
+    <div style="text-align: center" class=" col-md-12">
+        <button type="button" id="btn_sub" class="btn btn-info">提&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交</button>
+    </div>
+</div>
+
+
+</body>
+</html>
+

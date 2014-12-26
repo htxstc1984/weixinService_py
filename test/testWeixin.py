@@ -24,6 +24,15 @@ def test(url):
         crl.fp = StringIO.StringIO()
         crl.setopt(pycurl.USERAGENT, "dhgu hoho")
 
+        # content = '<xml>'
+        # content += '<ToUserName><![CDATA[toUser]]></ToUserName>'
+        # content += '<FromUserName><![CDATA[fromUser]]></FromUserName>'
+        # content += '<CreateTime>12345678</CreateTime>'
+        # content += '<MsgType><![CDATA[text]]></MsgType>'
+        # content += '<Content><![CDATA[zhufu]]></Content>'
+        # content += '</xml>'
+
+
         content = '<xml>'
         content += '<ToUserName><![CDATA[toUser]]></ToUserName>'
         content += '<FromUserName><![CDATA[oGWhot6q83jPLENglsitEv1xjYCw]]></FromUserName>'
@@ -51,7 +60,7 @@ def test(url):
 
 
 if __name__ == '__main__':
-    print test("http://localhost:8088/weixinrec")
-    # print test('http://59.57.246.46/WeixinService/weixinrec.html')
+    # print test("http://localhost:8088/weixinrec")
+    print test('http://59.57.246.46/weixinrec')
     # print test('http://172.16.109.105:8080/WeixinService/weixinrec.html')
     pass

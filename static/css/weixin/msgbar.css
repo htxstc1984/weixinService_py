@@ -1,0 +1,404 @@
+.status-item {
+	color: #333
+}
+
+.status-item .mod {
+	margin: 0;
+	padding-bottom: 12px;
+	position: relative
+}
+
+.status-item .hd {
+	float: left;
+	margin: 3px 20px 0 0;
+	width: 48px;
+	height: 48px
+}
+
+.status-item .bd {
+	border-bottom: 1px solid #eee;
+	overflow: hidden;
+	padding-bottom: 14px;
+	zoom: 1;
+	_width: 517px;
+	min-height: 48px
+}
+
+.status-item .bd .text {
+	margin: 0 0 5px 0;
+	font-size: 13px;
+	word-break: break-all
+}
+
+.status-item blockquote {
+	margin: 5px 0 5px 25px;
+	padding: 0 0 0 15px;
+	
+	width: 375px;
+	_width: 365px
+}
+
+.status-item blockquote p {
+	display: inline;
+	
+	padding: 0 15px 0 0;
+	word-wrap: break-word;
+	*zoom: 1
+}
+
+.status-item blockquote p img {
+	vertical-align: bottom
+}
+
+.status-item .attachments {
+	position: relative;
+	overflow: hidden;
+	zoom: 1;
+	_line-height: 0;
+	color: #999
+}
+
+.status-item .photo-set {
+	max-width: 128px;
+	max-height: 128px
+}
+
+.status-item .attachments div,.status-item .attachments h6,.status-item .attachments p
+	{
+	line-height: 1.62
+}
+
+.status-item .description {
+	margin: 0;
+	color: #aaa
+}
+
+.status-item .actions {
+	margin: 5px 0;
+	color: #aaa
+}
+
+.status-item .actions a.btn {
+	color: #7094b7
+}
+
+.status-item .actions a.btn:hover {
+	background: #7094b7;
+	color: #fff
+}
+
+.status-item .actions a.btn-unlike,.status-item .actions a.btn-unreshare
+	{
+	color: #999
+}
+
+.status-item .actions a.btn-unlike:hover,.status-item .actions a.btn-unreshare:hover
+	{
+	background: #999;
+	color: #fff
+}
+
+.status-item .description,.status-item .attachments,.status-item .actions,.status-item .others
+	{
+	padding-left: 24px
+}
+
+.status-item .attachments .description {
+	padding-left: 0;
+	word-wrap: break-word
+}
+
+
+.status-item .upload-pic-wrapper:hover {
+	background: 0
+}
+
+.status-item .others {
+	display: none
+}
+
+.status-item .comments {
+	position: relative;
+	left: 0;
+	top: 0;
+	overflow: hidden;
+	*zoom: 1
+}
+
+.status-item .comments-items {
+	_line-height: 0
+}
+
+.status-item .comments-items p {
+	margin: 3px 0;
+	color: #666;
+	overflow: hidden;
+	zoom: 1;
+	word-wrap: break-word;
+	line-height: 1.62
+}
+
+.status-item .comments-items .mover {
+	background: #f2f2f2
+}
+
+.status-item .comments-items p em {
+	float: left;
+	width: 80%;
+	font-style: normal
+}
+
+.status-item .comments .comment-text {
+	width: 330px
+}
+
+.status-item .comments .add-more-comments,.comment-posted input {
+	display: none
+}
+
+.status-item .comment-posted .add-more-comments {
+	display: inline
+}
+
+.status-item .comments-items .btn-del {
+	float: right;
+	color: #aaa
+}
+
+.status-item .comments-items .btn-del:hover {
+	color: #bbb;
+	background: 0
+}
+
+.status-item .likers {
+	padding: 0;
+	color: #aaa
+}
+
+.status-item .likers em {
+	max-width: 300px;
+	float: left;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	overflow: hidden;
+	zoom: 1;
+	font-style: normal;
+	_width: expression(( documentElement.clientWidth > 300)?  "300px":"auto")
+}
+
+.status-item .created_at a {
+	color: #999
+}
+
+.status-item .created_at a:hover {
+	background: #999;
+	color: #fff
+}
+
+
+.status-current .bd {
+	border-color: #bfddb7
+}
+
+.video-player {
+	position: relative;
+	left: 0;
+	top: 0;
+	zoom: 1
+}
+
+.video-player img {
+	width: 130px;
+	height: 97px;
+	border: 0 none
+}
+
+
+.video-player .video-overlay:hover {
+	background-position: 0 -97px
+}
+
+
+.video-player .video-object {
+	display: none
+}
+
+.layout-1 .attachments {
+	display: inline
+}
+
+.layout-1 .media img {
+	float: right;
+	margin-left: 12px;
+	max-height: 100px;
+	max-width: 100px;
+	_width: expression(( documentElement.clientWidth > 100)?  "100px":"auto")
+}
+
+.layout-None blockquote,.layout-2 blockquote {
+	width: auto
+}
+
+.layout-3 .album,.layout-3 .media,.layout-None .media {
+	float: left;
+	margin: 0 10px 10px 0;
+	background: 0;
+	padding: 0
+}
+
+
+.layout-3 .album img {
+	max-height: 100px;
+	max-width: 100px;
+	_width: expression(( documentElement.clientWidth > 100)?  "100px":"auto")
+}
+
+.layout-3 blockquote {
+	clear: both
+}
+
+.layout-4 .media {
+	float: left;
+	margin: 0 14px 10px 0
+}
+
+.combined-statuses {
+	margin: 0 0 10px 63px;
+	padding: 0 0 8px 0;
+	border-bottom: 1px solid #eee
+}
+
+.comments .mention-highlighter {
+	top: 2px;
+	width: 300px;
+	padding: 2px 0
+}
+
+.status-item .allstar50,.status-item .allstar50,.status-item .allstar45,.status-item .allstar40,.status-item .allstar35,.status-item .allstar30,.status-item .allstar25,.status-item .allstar20,.status-item .allstar15,.status-item .allstar10,.status-item .allstar05
+	{
+	margin-left: 5px
+}
+
+.group-pics {
+	overflow: hidden;
+	zoom: 1
+}
+
+.group-pics img {
+	cursor: pointer
+}
+
+.group-pics .group-pics-more {
+	display: none
+}
+
+.group-pics .group-pic {
+	margin-right: 7px
+}
+
+.group-pics .text-more {
+	cursor: pointer;
+	color: #999
+}
+
+.group-pic {
+	position: relative;
+	display: inline-block;
+	*display: inline;
+	zoom: 1;
+	vertical-align: top
+}
+
+.group-pic a {
+	display: none
+}
+
+.group-pics-small .group-pic {
+	float: left;
+	clear: both;
+	min-width: 32px;
+	min-height: 32px;
+	margin: 0 0 10px 0;
+	line-height: 0;
+	font-size: 0
+}
+
+.group-pics-small a {
+	display: block;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: 32px;
+	height: 32px;
+	line-height: 100em;
+	text-align: center;
+	overflow: hidden
+}
+
+.group-pics-small .group-pic a:hover {
+	opacity: 1;
+	filter: alpha(opacity = 100)
+}
+
+.group-pics-small .group-pics-more {
+	display: block
+}
+
+.group-pics-small .text-more {
+	display: none
+}
+
+.status-item .description,.status-item .attachments,.status-item .actions,.status-item .others
+	{
+	padding-left: 0
+}
+
+.status-item blockquote {
+	margin-left: 0
+}
+
+.status-item {
+	-webkit-box-shadow: 5px 5px 5px #333;
+    -webkit-border-radius: 6px;
+    
+    padding: 5px;
+	border-bottom: 1px solid #a65f00;
+	border-left: 1px solid #a65f00;
+	border-top: 1px solid #a65f00;
+	border-right: 1px solid #a65f00;
+	margin-bottom: 14px
+}
+
+.status-item .bd {
+	border-bottom: 0 none;
+	padding-bottom: 0;
+	margin: 0;
+	_width: 500px
+}
+
+.status-item .bd h5 {
+	font-size: 14px
+}
+
+.status-item .calendar,.status-item .calendar:hover {
+	color: #333;
+	background: #f2f2f2;
+	padding: 5px;
+	display: block;
+	text-align: center
+}
+
+.status-item .calendar em {
+	display: block;
+	font-size: 24px;
+	line-height: 24px
+}
+
+.status-item .actions a.btn {
+	color: None
+}
+
+.status-item .actions a.btn:hover {
+	color: #fff
+}

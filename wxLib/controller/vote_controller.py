@@ -4,6 +4,7 @@ Created on '2014/12/2'
 
 @author: 'hu'
 '''
+from globalVars import *
 from flask import session
 from flask.templating import render_template
 from json import *
