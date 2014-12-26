@@ -75,7 +75,7 @@ def getNewsBody(infoid=None):
 @app.route('/register/<openid>')
 def getRegister(openid=None):
     if openid == None or openid == '':
-        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份')
+        return render_template('common/error.html', title=u'错误', message=u'无法确认您的微信身份')
     session['openid'] = openid
     return render_template('weixin/register.html')
 
@@ -85,7 +85,7 @@ def confirmRegister():
     if session.has_key('openid'):
         openid = session['openid']
     else:
-        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
+        return render_template('common/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
     cond = request.form['cond']
     type = request.form['type']
     code = bindWeixin(cond, type, openid)
@@ -117,7 +117,7 @@ def confirmRegister():
 @app.route('/reg/checkmms', methods=['POST'])
 def checkmms():
     if not session.has_key('openid') or not request.form.has_key('mmscode'):
-        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
+        return render_template('common/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
     openid = session['openid']
     mmscode = request.form['mmscode']
     retcode = confirmBindMMS(mmscode, openid)
@@ -133,15 +133,15 @@ def checkemail(uid=None):
 def bindemail(code=None):
     rs = confirmBind(code)
     if rs == 0:
-        return render_template('vote/error.html', title=u'温馨提示', message=u'欢迎您，请使用微信平台为国贸员工定制的信息服务！')
+        return render_template('common/error.html', title=u'温馨提示', message=u'欢迎您，请使用微信平台为国贸员工定制的信息服务！')
     else:
-        return render_template('vote/error.html', title=u'错误', message=u'验证失败，您的邮件可能已经过期，请重新认证')
+        return render_template('common/error.html', title=u'错误', message=u'验证失败，您的邮件可能已经过期，请重新认证')
 
 
 @app.route('/reg/delete', methods=['POST'])
 def deleteRegister():
     if not session.has_key('openid'):
-        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
+        return render_template('common/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
     openid = session['openid']
     code = unbindWeixin(openid)
     return str(code)
@@ -179,7 +179,7 @@ def getMenusNS(openid=None):
 @app.route('/itg/menus')
 def getMenus():
     if not session.has_key('openid'):
-        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
+        return render_template('common/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
     openid = session['openid']
     rs = checkOpenid(openid)
     if rs['resultCode'] != 0:
@@ -190,19 +190,19 @@ def getMenus():
 @app.route('/itg/query')
 def getQuery():
     if not session.has_key('openid'):
-        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
+        return render_template('common/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
     return render_template('weixin/query.html')
 
 
 @app.route('/itg/query/get', methods=['POST'])
 def getPsnInfos():
     if not session.has_key('openid'):
-        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
+        return render_template('common/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
     cond = request.form['cond']
     openid = session['openid']
     rs = checkOpenid(openid)
     if rs['resultCode'] != 0:
-        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份')
+        return render_template('common/error.html', title=u'错误', message=u'无法确认您的微信身份')
     rs_psn = getPsnPhoneVOs(openid, cond)
     resp = make_response(dumps(rs_psn))
     assert isinstance(resp, Response)
