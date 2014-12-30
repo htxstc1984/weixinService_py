@@ -29,10 +29,10 @@ class SwInfo(Base):
 if __name__ == '__main__':
     # cursor = session.execute('select top 100 * from sw_info ORDER by infodatetime DESC ')
     # assert isinstance(cursor,)
-    # query = session_cms.query(SwInfo).with_entities(SwInfo.infoid, SwInfo.infotitle, SwInfo.infodatetime).filter(
-    # and_(SwInfo.infoisdisplay == '1', SwInfo.columnid.in_((2, 3)))).order_by(
-    # desc(SwInfo.infodatetime)).offset(0).limit(10)
-    # result = query.all()
-    # for v in result:
-    #     print v.infocontent
+    query = session_cms.query(SwInfo).filter(
+        and_(SwInfo.infoisdisplay == '1', SwInfo.columnid.in_((2, 3)))).order_by(
+        desc(SwInfo.infodatetime)).offset(0).limit(10)
+    result = query.all()
+    for v in result:
+        print v.infocontent
     pass

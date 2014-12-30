@@ -6,8 +6,9 @@ Created on '2014/12/3'
 '''
 if __name__ == '__main__':
     import sys, os
+
     sys.path.insert(0, "C:/developIDE/pycharmWorksapce/weixinService_py")
-    sys.path.insert(0, "C:\developIDE\pyenvs\env3\Lib\site-packages")
+    sys.path.insert(0, "C:/developIDE/pyenvs/env3/Lib/site-packages")
 
 from wxLib.utils import *
 from sqlalchemy.orm import scoped_session, sessionmaker, query
@@ -18,13 +19,18 @@ from conf.globalConf import SQLALCHEMY_DATABASE_URI
 from flask import Flask
 from sqlalchemy.ext.declarative import declarative_base
 
-engine = create_engine(SQLALCHEMY_DATABASE_URI)
+engine = create_engine(SQLALCHEMY_DATABASE_URI, pool_size=30)
 wx_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
 Base = declarative_base()
 # Base.query = wx_session.query_property()
 db = SQLAlchemy()
+
+
+# def getWXSession():
+#     return scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
+
 
 if __name__ == '__main__':
     app = Flask(__name__)
@@ -101,6 +107,25 @@ class Vote_action(db.Model, Base, MetaTransform):
         )
 
 
+class Document_dept(db.Model, Base, MetaTransform):
+    __tablename__ = 'document_dept'
+    id = db.Column('id', db.Integer, autoincrement=db.Integer, primary_key=True)
+    deptname = db.Column('deptname', db.String(255), nullable=False)
+    fatherid = db.Column('fatherid', db.String(30), nullable=False)
+    order = db.Column('order', db.String(30), nullable=False)
+    ehrid = db.Column('ehrid', db.String(30), nullable=False)
+    qywxid = db.Column('qywxid', db.String(30), nullable=False)
+    # aa = db.Column('aa', db.String(30), nullable=False)
+
+
+# class Document_psn(db.Model, Base, MetaTransform):
+# __tablename__ = 'document_psn'
+# id = db.Column('id', db.Integer, autoincrement=db.Integer, primary_key=True)
+# psnname = db.Column('psnname', db.String(255), nullable=False)
+# dept = db.Column('dept', db.String(255), nullable=False)
+#     position = db.Column('position', db.String(255), nullable=False)
+
+
 class Theme_collection(db.Model, Base, MetaTransform):
     __tablename__ = 'theme_collection'
     id = db.Column('id', db.Integer, autoincrement=db.Integer, primary_key=True)
@@ -121,7 +146,7 @@ class Theme_collection_item(db.Model, Base, MetaTransform):
     psnname = db.Column('psnname', db.String(20), nullable=False)
     createDate = db.Column('createDate', db.Unicode(30), nullable=True)
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     manager.run()
     pass

@@ -8,6 +8,9 @@ Created on '2014/12/12'
 APP_ID = 'wxf0364f589da8ea45'
 SECRET = 'c9d8f4f5898d4e02fac60a081a9db121'
 
+APP_ID_QY = 'wxeb2ff9ff082f4076'
+SECRET_QY = '3oF4yHGkiiIXjm31cnpq-XievtGixoeMTCofruChZyqd97zQQwie0TWcZ5JDEbKi'
+
 groups = dict(
     g1=dict(
         name='summary',
@@ -16,6 +19,11 @@ groups = dict(
     ),
     g2=dict(
         name='employee',
+        title='欢迎关注厦门国贸',
+        picurl='http://59.57.246.46/static/image/logo4.jpg'
+    ),
+    g3=dict(
+        name='theme',
         title='欢迎关注厦门国贸',
         picurl='http://59.57.246.46/static/image/logo4.jpg'
     )
@@ -45,7 +53,7 @@ menus = dict(
     ),
     # m1004=dict(
     # title='员工认证',
-    #     picurl='http://59.57.246.46/static/image/ygzq.png',
+    # picurl='http://59.57.246.46/static/image/ygzq.png',
     #     url='http://59.57.246.46/register/%s',
     #     group=groups['g2'],
     #     index=4
@@ -63,6 +71,13 @@ menus = dict(
         url='http://59.57.246.46/stock#mp.weixin.qq.com',
         group=groups['g1'],
         index=6
+    ),
+    m1007=dict(
+        title='新年送祝福',
+        picurl='http://59.57.246.46/static/image/djs.png',
+        url='http://59.57.246.46/collect/1/main/%s',
+        group=groups['g3'],
+        index=7
     )
 )
 
@@ -91,6 +106,12 @@ buttons = dict(
                     name='国贸股价',
                     url='http://59.57.246.46/stock'
                 ),
+                dict(
+                    type='view',
+                    name='微信链接',
+                    url='http://59.57.246.46/links'
+                )
+
             ]
         ),
         dict(
@@ -99,9 +120,9 @@ buttons = dict(
             key='employee'
         ),
         dict(
-            type='view',
-            name='微信链接',
-            url='http://59.57.246.46/links'
+            type='click',
+            name='新年送祝福',
+            key='theme'
         )
     ]
 )

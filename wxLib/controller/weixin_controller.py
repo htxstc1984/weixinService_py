@@ -311,7 +311,7 @@ def weixinrec():
 
 
 def createButtons():
-    token = getAccessToken()
+    token = getAccessToken(APP_ID, SECRET)
     if token:
         curl = pycurl.Curl()
         f = StringIO.StringIO()
@@ -332,11 +332,11 @@ def createButtons():
             print backinfo
 
 
-def getAccessToken():
+def getAccessToken(app_id, secret):
     curl = pycurl.Curl()
     f = StringIO.StringIO()
     curl.setopt(pycurl.URL, "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="
-                + APP_ID + "&secret=" + SECRET)
+                + app_id + "&secret=" + secret)
     curl.setopt(pycurl.WRITEFUNCTION, f.write)
     curl.setopt(pycurl.SSL_VERIFYPEER, 0)
     curl.setopt(pycurl.SSL_VERIFYHOST, 0)
@@ -367,4 +367,5 @@ def getRightHtml(content):
 
 
 if __name__ == '__main__':
+    createButtons()
     pass

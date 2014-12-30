@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>组织架构维护</title>
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+    .table-bordered {
+        border: 1px solid #dddddd; /* 整体表格边框 */
+    }
+
+    .table-bordered th {
+        font-size: large;
+        background-color: #b9def0;
+        text-align: center;
+    }
+
+    .table-bordered tr {
+        font-size: medium;
+    }
+
+    .table-bordered > thead > tr > th,
+    .table-bordered > tbody > tr > th,
+    .table-bordered > tfoot > tr > th,
+    .table-bordered > thead > tr > td,
+    .table-bordered > tbody > tr > td,
+    .table-bordered > tfoot > tr > td {
+        border: 1px solid #dddddd; /* 单元格边框 */
+        line-height: 36px;
+    }
+
+    .table-bordered > thead > tr > th,
+    .table-bordered > thead > tr > td {
+        border-bottom-width: 2px; /* 表头底部边框 */
+    }
+</style>
+<body>
+<div class="container">
+    <ol class="breadcrumb" id="uribar">
+        <li>当前位置:</li>
+        <li id="uri_{&root_id&}"><a href="javascript:getsuborgsbyuribar('{&root_id&}')">{&root_corp_name&}</a></li>
+    </ol>
+    <table class="table table-hover table-bordered">
+
+        <thead>
+        <tr>
+            {#            <th>ehrid</th>#}
+            {#            <th>fatherid</th>#}
+            <th>类型</th>
+            <th>公司/部门名称</th>
+            <th>最后修改日期</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="tab_orgs">
+
+        {% for corp in manage_corps %}
+            {% set typ_chs='' %}
+            {% if corp.depttyp=='corp' %}
+                {% set typ_chs='公司' %}
+            {% else %}
+                {% set typ_chs='部门' %}
+            {% endif %}
+            <tr>
+                {#                <td>{&corp.ehrid&}</td>#}
+                {#                <td>{&corp.fatherid&}</td>#}
+                {% if corp.depttyp=='corp' %}
+                    <td><span class="label label-success">{&typ_chs&}</span></td>
+                {% else %}
+                    <td><span class="label label-warning">{&typ_chs&}</span></td>
+                {% endif %}
+
+                <td>{&corp.deptname&}</td>
+                <td>{&corp.ts&}</td>
+                <td>
+                    {% if corp.depttyp=='corp' %}
+                        <button type="button" class="btn btn-mini btn-default"
+                                onclick="getsuborgs('{&corp.ehrid&}','{&corp.deptname&}')">管理子公司
+                        </button>
+                    {% else %}
+                        <button type="button" class="btn btn-mini btn-default">管理人员</button>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    function getsuborgs(fatherid, deptname) {
+        $.post('/qy/manage/' + fatherid, {}, function (orgs) {
+            $('#uribar').append("<li id='uri_" + fatherid + "'><a href=\"javascript:getsuborgsbyuribar('" + fatherid + "')\">" + deptname + "</a></li>")
+            $('#tab_orgs').empty();
+            for (var i = 0; i < orgs.length; i++) {
+                $('#tab_orgs').append(createOrgNode(orgs[i]))
+            }
+        })
+    }
+
+    function getsuborgsbyuribar(fatherid) {
+        $('#uri_' + fatherid).nextAll().remove()
+        $.post('/qy/manage/' + fatherid, {}, function (orgs) {
+            $('#tab_orgs').empty();
+            for (var i = 0; i < orgs.length; i++) {
+                $('#tab_orgs').append(createOrgNode(orgs[i]))
+            }
+        })
+    }
+
+    function createOrgNode(org) {
+        var html = "<tr>";
+
+        if (org.depttyp == 'corp') {
+            html += "<td><span class='label label-success'>公司</span></td>";
+        } else {
+            html += "<td><span class='label label-warning'>部门</span></td>";
+        }
+
+        html += "<td>" + org.deptname + "</td>";
+        html += "<td>" + org.ts + "</td>";
+        if (org.depttyp == 'corp') {
+            html += "<td><button type='button' class='btn btn-mini btn-default' onclick=\"getsuborgs('" + org.ehrid + "','" + org.deptname + "')\">管理子公司</button></td>";
+        } else {
+            html += "<td><button type='button' class='btn btn-mini btn-default'>管理人员</button></td>";
+        }
+        html += "</tr>";
+
+
+        return html
+    }
+</script>
+
+</body>
+</html>
