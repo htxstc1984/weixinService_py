@@ -20,6 +20,9 @@ def getTheme(collect_id=None, openid=None):
     collect = wx_session.query(Theme_collection).filter(Theme_collection.id == collect_id).one()
     if collect == None:
         return render_template('common/error.html', title=u'错误', message=u'找不到此页面')
+    now = unicode(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    if now > collect.expire:
+        return render_template('common/error.html', title=u'提示', message=u'活动已经过期')
     if not session.has_key('openid'):
         session['openid'] = openid
     return render_template('theme/collection/' + collect.template_dir + '/main.html', title=collect.title,

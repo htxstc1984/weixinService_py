@@ -27,18 +27,14 @@ import copy
 
 @app.route('/qy/main/<root>')
 def getMainPage(root=None):
-    corps = session_ehr.query(Weixin_org).filter(Weixin_org.fatherid == root).order_by(Weixin_org.depttyp,
-                                                                                       Weixin_org.ehrid).all()
-    manage_corps = convert_result_to_chinese(corps, ['deptname'], Weixin_org)
     root_corp_name = ''
     if root == '1001':
         root_corp_name = u'国贸集团股份有限公司'
     else:
         root_corp = session_ehr.query(Weixin_org).filter(Weixin_org.ehrid == root).one()
         if not root_corp == None:
-            root_corp_name = root_corp.deptname.encode('latin-1').decode('gbk')
-    return render_template('weixin/qy/main.html', manage_corps=manage_corps, root_corp_name=root_corp_name,
-                           root_id=root)
+            root_corp = root_corp.getSimpleDict()
+    return render_template('weixin/qy/main.html', root_corp_name=root_corp['deptname'], root_id=root)
 
 
 @app.route('/qy/manage/<org_id>', methods=['POST'])
@@ -61,18 +57,17 @@ def createOrgTree():
         order = 1
         fatherid = '1001'
         for org in rs_orgs:
-            # assert isinstance(org, Weixin_org)
             parentid = orgindexmap[org['fatherid']]
-            orgdata = dict(name=org['deptname'].encode("utf-8"), parentid=parentid, order=str(order))
+            orgdata = dict(name=org['deptname'], parentid=parentid, order=str(order))
             ret = createOrg(orgdata)
-            if ret.errcode == 0:
-                orgindexmap[org['ehrid']] = str(ret.id)
+            if ret['errcode'] == 0:
+                orgindexmap[org['ehrid']] = str(ret['id'])
                 doc_dept = Document_dept(deptname=org['deptname'], fatherid=org['fatherid'], ehrid=org['ehrid'],
-                                         qywxid=str(ret.id),
+                                         qywxid=str(ret['id']),
                                          order=str(order))
                 wx_session.merge(doc_dept)
             else:
-                return False
+                return '初始化组织架构失败'
             if org['fatherid'] != fatherid:
                 fatherid = org['fatherid']
                 order = 1
@@ -80,9 +75,9 @@ def createOrgTree():
                 order += 1
     except BaseException, e:
         print e.message
-        return False
+        return '初始化组织架构失败'
     wx_session.commit()
-    return True
+    return '初始化组织架构成功'
 
 
 def convert_result_to_chinese(resultset, fields, Class):
@@ -90,7 +85,7 @@ def convert_result_to_chinese(resultset, fields, Class):
     for field in fields:
         for row in resultset:
             newrow = copy.copy(row)
-            setattr(newrow, field, getattr(newrow, field).encode('latin-1').decode('gbk'))
+            # setattr(newrow, field, getattr(newrow, field).encode('latin-1').decode('gbk'))
             convertedset.append(newrow)
     if not Weixin_org.getSimpleDict == None:
         convertedset = [row.getSimpleDict() for row in convertedset]
@@ -106,7 +101,7 @@ def createOrg(org):
         curl.setopt(pycurl.WRITEFUNCTION, f.write)
         curl.setopt(pycurl.SSL_VERIFYPEER, 0)
         curl.setopt(pycurl.SSL_VERIFYHOST, 0)
-        post_data = dumps(org)
+        post_data = dumps(org, ensure_ascii=False).encode('utf-8')
         curl.setopt(curl.POSTFIELDS, post_data)
         curl.perform()
         backinfo = ''

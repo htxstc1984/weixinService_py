@@ -38,9 +38,19 @@ app.controller('appController', function ($scope, $http) {
 
     $scope.submitMsg = "";
     $scope.submitAction = function () {
+        psnname = $('#psnname').val();
+        mobile = $('#mobile').val();
+        bz = $('#bz').val();
+        if(psnname.trim()=='' || mobile.trim()==''){
+            alert('请完整填写姓名和手机号码');
+            return false;
+        }
         $http.post('/mobi/vote/submit', {
             openid: openid,
             schema_id: schema_id,
+            psnname: psnname,
+            mobile: mobile,
+            bz: bz,
             selectItems: $scope.selectItems
         }).success(function (data) {
             if (data == 'error') {
@@ -55,6 +65,10 @@ app.controller('appController', function ($scope, $http) {
     }
 
     $scope.fullSelect = function () {
+        $scope.selectItems = new Array();
+        $('.btn-danger').each(function () {
+            $scope.selectItems.push($(this).attr('bindid'));
+        })
         return !($scope.selectItems.length == mutimax);
     }
 

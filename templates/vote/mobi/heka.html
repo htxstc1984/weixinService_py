@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta charset="UTF-8">
+    <title>Impress.js 展示</title>
+    <meta name="description" content="本 demo 纯粹用于展示 impress.js，接近翻译，类似教程。"/>
+    <meta name="author" content="Sam Chen"/>
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+</style>
+<body style="width: 100%;height: 100%;margin: 0">
+{#<div class="fallback-message">#}
+{#    <p>不幸的是，你的浏览器并不支持 <strong>impress.js</strong> 所需功能，因此你看到的这个展报只是平常的 HTML 文档。</p>#}
+{##}
+{#    <p>请升级到最新版本的 Firefox、Chrome或 Safari 以正常查看本 demo。</p>#}
+{#</div>#}
+<script type="text/javascript">
+    function next() {
+        var imp = impress();
+        imp.next();
+    }
+</script>
+<button style="position: fixed;top: 70%;right: 10px;z-index: 1;opacity: 0.7" class="btn btn-warning" type="button"
+        onclick="next()">
+    <span class="glyphicon glyphicon-ok"></span>
+</button>
+<div id="impress">
+    <div id="welcome" class="photo step slider" data-x="-2000" data-y="-2000">
+        <p>你现在看到的是本展报(presentation)第一屏。</p>
+
+        <h1>在做这个展报之前，需要明白以下几点：</h1>
+        <ol>
+            <li>如作者所言，you need to be a designer，否则做出来的展报就会如我这份一样</li>
+            <li>you have something to show，假如没有，做出来的展报就会如我这份一样</li>
+            <li>做这个展报最重要的是，设计与内容，代码的实现只是很小的一步，每屏都只是平常的 HTML + CSS，所以假如你有非常棒的内容，接下来该考验你的设计能力，或者，脑补能力。代码？交给我这样的码人去写就好。
+            </li>
+        </ol>
+        <p>本 div 块的 ID 值为 "welcome"，这样在浏览器中查看展报时，url 地址会显示为 xxx.html#/welcome，假如 div 不带 ID，则 impress.js 会自动赋给 url 一个
+            "step-N" 的值。当然，ID 名要比 "step-N" 有意义多，而且可以针对其做更多样式。另外，本屏所处的位置由 data-x data-y 值决定，参照点为 canvas 的中心原点。</p>
+    </div>
+    <div class="photo step slider" data-x="-2000" data-y="-1200">
+        <p>第二屏，暂没什么作用。只是看看垂直方向的滑动效果。</p>
+    </div>
+    <div class="photo step slider" data-x="-1000" data-y="-1200">
+        <img src="/static/image/develop-fztd1.png">
+    </div>
+    <div class="photo step slider" data-x="-1000" data-y="-1200" data-z='-3000'>
+        <p>第4屏，暂没什么作用。只是看看垂直方向的滑动效果。</p>
+    </div>
+</div>
+
+<script src="/static/js/impress.js/js/impress.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.phote').css({
+            width: $(window).width(),
+            height: $(window).height()
+        })
+        impress().init();
+    })
+</script>
+
+</body>
+</html>

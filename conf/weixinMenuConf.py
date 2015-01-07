@@ -19,12 +19,12 @@ groups = dict(
     ),
     g2=dict(
         name='employee',
-        title='欢迎关注厦门国贸',
+        title='员工专区',
         picurl='http://59.57.246.46/static/image/logo4.jpg'
     ),
     g3=dict(
         name='theme',
-        title='欢迎关注厦门国贸',
+        title='活动专区',
         picurl='http://59.57.246.46/static/image/logo4.jpg'
     )
 )
@@ -71,13 +71,22 @@ menus = dict(
         url='http://59.57.246.46/stock#mp.weixin.qq.com',
         group=groups['g1'],
         index=6
-    ),
-    m1007=dict(
-        title='新年送祝福',
+    )
+    # ,
+    # m1007=dict(
+    #     title='新年送祝福',
+    #     picurl='http://59.57.246.46/static/image/djs.png',
+    #     url='http://59.57.246.46/collect/1/main/%s',
+    #     group=groups['g3'],
+    #     index=7
+    # )
+    ,
+    m1008=dict(
+        title='2014年十大影响力事件评选',
         picurl='http://59.57.246.46/static/image/djs.png',
-        url='http://59.57.246.46/collect/1/main/%s',
+        url='http://59.57.246.46/mobi/vote/1/%s',
         group=groups['g3'],
-        index=7
+        index=8
     )
 )
 
@@ -121,7 +130,7 @@ buttons = dict(
         ),
         dict(
             type='click',
-            name='新年送祝福',
+            name='活动专区',
             key='theme'
         )
     ]
@@ -147,7 +156,8 @@ errors = dict(
 )
 
 testCommand = dict(
-    zhufu='http://59.57.246.46/collect/1/main/%s'
+    zhufu='http://59.57.246.46/collect/1/main/%s',
+    yxl='http://59.57.246.46/mobi/vote/1/%s'
 )
 
 if __name__ == '__main__':

@@ -42,7 +42,7 @@
 <div class="container">
     <ol class="breadcrumb" id="uribar">
         <li>当前位置:</li>
-        <li id="uri_{&root_id&}"><a href="javascript:getsuborgsbyuribar('{&root_id&}')">{&root_corp_name&}</a></li>
+{#        <li id="uri_{&root_id&}"><a href="javascript:getsuborgsbyuribar('{&root_id&}')">{&root_corp_name&}</a></li>#}
     </ol>
     <table class="table table-hover table-bordered">
 
@@ -58,41 +58,18 @@
         </thead>
         <tbody id="tab_orgs">
 
-        {% for corp in manage_corps %}
-            {% set typ_chs='' %}
-            {% if corp.depttyp=='corp' %}
-                {% set typ_chs='公司' %}
-            {% else %}
-                {% set typ_chs='部门' %}
-            {% endif %}
-            <tr>
-                {#                <td>{&corp.ehrid&}</td>#}
-                {#                <td>{&corp.fatherid&}</td>#}
-                {% if corp.depttyp=='corp' %}
-                    <td><span class="label label-success">{&typ_chs&}</span></td>
-                {% else %}
-                    <td><span class="label label-warning">{&typ_chs&}</span></td>
-                {% endif %}
 
-                <td>{&corp.deptname&}</td>
-                <td>{&corp.ts&}</td>
-                <td>
-                    {% if corp.depttyp=='corp' %}
-                        <button type="button" class="btn btn-mini btn-default"
-                                onclick="getsuborgs('{&corp.ehrid&}','{&corp.deptname&}')">管理子公司
-                        </button>
-                    {% else %}
-                        <button type="button" class="btn btn-mini btn-default">管理人员</button>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
 
         </tbody>
     </table>
 </div>
 
 <script type="text/javascript">
+
+    $(function(){
+        getsuborgs('{&root_id&}', '{&root_corp_name&}');
+    })
+
     function getsuborgs(fatherid, deptname) {
         $.post('/qy/manage/' + fatherid, {}, function (orgs) {
             $('#uribar').append("<li id='uri_" + fatherid + "'><a href=\"javascript:getsuborgsbyuribar('" + fatherid + "')\">" + deptname + "</a></li>")

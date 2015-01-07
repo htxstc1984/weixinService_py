@@ -20,6 +20,11 @@ from sqlalchemy import and_, or_, func
 import os
 
 
+@app.route('/heka')
+def getHeka():
+    return render_template('vote/mobi/heka1.html')
+
+
 @app.route('/voteSetting')
 def voteSetting():
     return render_template('vote/setting.html')
@@ -112,18 +117,34 @@ def getVote(schema_id=None, openid=None):
             openid = session.get('openid')
         else:
             return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份')
-    rs = checkOpenid(openid)
-    if rs['resultCode'] != 0:
-        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份')
     session['openid'] = openid
+    rs = checkOpenid(openid)
+    psnname = ''
+    mobile = ''
+    bz = ''
+    isregisted = False
+    if rs['resultCode'] == 0:
+        psnname = rs['psnname']
+        mobile = rs['mobile']
+        isregisted = True
+
+    psn_detail = wx_session.query(Vote_psn_detail).filter(
+        and_(Vote_psn_detail.schema_id == schema_id, Vote_psn_detail.openid == openid)).all()
+
+    if len(psn_detail) != 0:
+        psnname = psn_detail[0].psnname
+        mobile = psn_detail[0].mobile
+        bz = psn_detail[0].bz
+
     schema = wx_session.query(Vote_schema).filter_by(id=schema_id).one()
     if schema == None:
         return render_template('vote/error.html', title=u'错误', message=u'您选择的投票不存在')
     items = wx_session.query(Vote_item, Vote_action.item_id).outerjoin(Vote_action,
-                                                                       Vote_action.item_id == Vote_item.id).filter(
+                                                                       and_(Vote_action.item_id == Vote_item.id,
+                                                                            Vote_action.openid == openid)).filter(
         and_(Vote_item.schema_id == schema.id)).all()
-
-    return render_template('vote/mobi/vote.html', schema=schema, openid=openid, items=items)
+    return render_template('vote/mobi/vote.html', schema=schema, openid=openid, items=items, psnname=psnname,
+                           mobile=mobile, bz=bz, isregisted=isregisted)
 
 
 @app.route('/mobi/vote/submit', methods=['POST'])
@@ -132,8 +153,18 @@ def submitVote():
         return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份')
     try:
         openid = session['openid']
+
         data = request.data
         json = simplejson.loads(data)
+
+        schema_id = json['schema_id']
+        psnname = json['psnname']
+        mobile = json['mobile']
+        bz = json['bz']
+
+        psn_detail = Vote_psn_detail(openid=openid, schema_id=schema_id, psnname=psnname, mobile=mobile, bz=bz)
+        wx_session.merge(psn_detail)
+
         actions = list()
 
         for selectItem in json['selectItems']:

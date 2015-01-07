@@ -27,9 +27,9 @@ class Weixin_org(Base):
     def getSimpleDict(self):
         return dict(ehrid=str(self.ehrid).strip(),
                     fatherid=str(self.fatherid).strip(),
-                    deptname=self.deptname,
-                    depttyp=self.depttyp,
-                    ts=self.ts
+                    deptname=self.deptname.encode('latin-1').decode('gbk'),
+                    depttyp=self.depttyp.encode("utf-8"),
+                    ts=self.ts.encode("utf-8")
         )
 
 

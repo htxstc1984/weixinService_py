@@ -29,7 +29,7 @@ db = SQLAlchemy()
 
 
 # def getWXSession():
-#     return scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
+# return scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 
 
 if __name__ == '__main__':
@@ -107,6 +107,15 @@ class Vote_action(db.Model, Base, MetaTransform):
         )
 
 
+class Vote_psn_detail(db.Model, Base, MetaTransform):
+    __tablename__ = 'vote_psn_detail'
+    openid = db.Column('openid', db.Unicode(30), nullable=False, primary_key=True)
+    schema_id = db.Column('schema_id', db.Integer, nullable=False, primary_key=True)
+    psnname = db.Column('psnname', db.String(255), nullable=False)
+    mobile = db.Column('mobile', db.String(30), nullable=True)
+    bz = db.Column('bz', db.String(255), nullable=True)
+
+
 class Document_dept(db.Model, Base, MetaTransform):
     __tablename__ = 'document_dept'
     id = db.Column('id', db.Integer, autoincrement=db.Integer, primary_key=True)
@@ -133,6 +142,7 @@ class Theme_collection(db.Model, Base, MetaTransform):
     desc = db.Column('desc', db.Text, nullable=False)
     title = db.Column('title', db.String(255), nullable=False)
     template_dir = db.Column('template_dir', db.String(255), nullable=False)
+    expire = db.Column('expire', db.Unicode(30), nullable=False)
 
 
 class Theme_collection_item(db.Model, Base, MetaTransform):

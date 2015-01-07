@@ -367,5 +367,5 @@ def getRightHtml(content):
 
 
 if __name__ == '__main__':
-    createButtons()
+    # createButtons()
     pass
