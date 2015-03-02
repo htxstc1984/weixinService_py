@@ -40,33 +40,68 @@
 </style>
 <body>
 <div class="container">
-    <ol class="breadcrumb" id="uribar">
-        <li>当前位置:</li>
-{#        <li id="uri_{&root_id&}"><a href="javascript:getsuborgsbyuribar('{&root_id&}')">{&root_corp_name&}</a></li>#}
-    </ol>
-    <table class="table table-hover table-bordered">
+    <div class="col-md-12">
+        <ol class="breadcrumb" id="uribar">
+            <li>当前位置:</li>
+            {#        <li id="uri_{&root_id&}"><a href="javascript:getsuborgsbyuribar('{&root_id&}')">{&root_corp_name&}</a></li>#}
+        </ol>
+        <table class="table table-hover table-bordered">
 
-        <thead>
-        <tr>
-            {#            <th>ehrid</th>#}
-            {#            <th>fatherid</th>#}
-            <th>类型</th>
-            <th>公司/部门名称</th>
-            <th>最后修改日期</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody id="tab_orgs">
+            <thead>
+            <tr>
+                {#            <th>ehrid</th>#}
+                {#            <th>fatherid</th>#}
+                <th>类型</th>
+                <th>公司/部门名称</th>
+                <th>最后修改日期</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="tab_orgs">
 
 
+            </tbody>
+        </table>
+    </div>
+    <!-- 详情框 -->
+    <div class="modal fade" id="psnmodal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>部门</th>
+                            <th>邮箱</th>
+                            <th>手机号</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tab_psns">
 
-        </tbody>
-    </table>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn_bat_insert" type="button" class="btn btn-info"
+                            data-dismiss="modal">插入所有新员工
+                    </button>
+                    <button id="btn_bat_del" type="button" class="btn btn-info"
+                            data-dismiss="modal">删除所有已离职
+                    </button>
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">关闭
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
 
-    $(function(){
+    $(function () {
         getsuborgs('{&root_id&}', '{&root_corp_name&}');
     })
 
@@ -90,6 +125,11 @@
         })
     }
 
+    function getpsns(deptid){
+        $('#psnmodal').modal();
+
+    }
+
     function createOrgNode(org) {
         var html = "<tr>";
 
@@ -104,7 +144,7 @@
         if (org.depttyp == 'corp') {
             html += "<td><button type='button' class='btn btn-mini btn-default' onclick=\"getsuborgs('" + org.ehrid + "','" + org.deptname + "')\">管理子公司</button></td>";
         } else {
-            html += "<td><button type='button' class='btn btn-mini btn-default'>管理人员</button></td>";
+            html += "<td><button type='button' class='btn btn-mini btn-default' onclick=\"getpsns('" + org.ehrid + "')\">管理人员</button></td>";
         }
         html += "</tr>";
 

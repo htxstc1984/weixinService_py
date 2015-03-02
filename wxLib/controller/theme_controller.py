@@ -11,7 +11,6 @@ from flask.templating import render_template
 from flask import make_response
 from flask import request, url_for, redirect
 from werkzeug.wrappers import Response, Headers
-from wxLib.meta.weixinMeta import *
 from wxLib.callws.ehr import *
 
 

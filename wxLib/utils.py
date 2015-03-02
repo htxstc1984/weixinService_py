@@ -105,14 +105,14 @@ def filter_tags(htmlstr):
     # 去掉多余的空行
     blank_line = re.compile('\n+')
     s = blank_line.sub('\n', s)
-    s = replaceCharEntity(s)  #替换实体
+    s = replaceCharEntity(s)  # 替换实体
     return s
 
 
 ##替换常用HTML字符实体.
 # 使用正常的字符替换HTML中特殊的字符实体.
 # 你可以添加新的实体字符到CHAR_ENTITIES中,处理更多HTML字符实体.
-#@param htmlstr HTML字符串.
+# @param htmlstr HTML字符串.
 def replaceCharEntity(htmlstr):
     CHAR_ENTITIES = {'nbsp': ' ', '160': ' ',
                      'lt': '<', '60': '<',
@@ -123,13 +123,13 @@ def replaceCharEntity(htmlstr):
     re_charEntity = re.compile(r'&#?(?P<name>\w+);')
     sz = re_charEntity.search(htmlstr)
     while sz:
-        entity = sz.group()  #entity全称，如&gt;
-        key = sz.group('name')  #去除&;后entity,如&gt;为gt
+        entity = sz.group()  # entity全称，如&gt;
+        key = sz.group('name')  # 去除&;后entity,如&gt;为gt
         try:
             htmlstr = re_charEntity.sub(CHAR_ENTITIES[key], htmlstr, 1)
             sz = re_charEntity.search(htmlstr)
         except KeyError:
-            #以空串代替
+            # 以空串代替
             htmlstr = re_charEntity.sub('', htmlstr, 1)
             sz = re_charEntity.search(htmlstr)
     return htmlstr
@@ -140,12 +140,27 @@ def repalce(s, re_exp, repl_string):
 
 
 def truncate_html(name, length=200):
-    #print filter_tags(name)
+    # print filter_tags(name)
     suffix = ''
     if len(name) > length:
         suffix = '...'
     result = filter_tags(name)[0:length]
     return result + suffix
+
+
+def good_display(goods):
+    if goods == None:
+        return 0
+    if int(goods) > 50 and int(goods) <= 100:
+        return '50+'
+    if int(goods) > 100 and int(goods) <= 200:
+        return '100+'
+    if int(goods) > 200 and int(goods) <= 300:
+        return '200+'
+    if int(goods) > 300:
+        return '300+'
+
+    return goods
 
 
 if __name__ == '__main__':

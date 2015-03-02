@@ -59,7 +59,8 @@ def confirmBindMMS(mmscode, openid):
 
 
 if __name__ == '__main__':
-    print checkOpenid(u'oGWhot6q83jPLENglsitEv1xjYCw')
-    # print getPsnPhoneVOs(u'oGWhot6q83jPLENglsitEv1xjYCw', u'黄玉')
+    # print checkOpenid(u'oGWhot6q83jPLENglsitEv1xjYCw')
+    # aaa = getPsnPhoneVOs(u'oGWhot6q83jPLENglsitEv1xjYCw', u'黄庭曦')
+    print getPsnPhoneVOs(u'oGWhot6q83jPLENglsitEv1xjYCw', u'黄庭曦')
 
     # print  bindWeixin('13950002585','mms','oGWhot6q83jPLENglsitEv1xjYCw')

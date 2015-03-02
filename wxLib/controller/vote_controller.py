@@ -13,16 +13,26 @@ from flask import request
 from werkzeug.wrappers import Response, Headers
 from werkzeug.utils import secure_filename
 import simplejson
-from wxLib.meta.weixinMeta import *
 from wxLib.utils import *
 from wxLib.callws.ehr import *
 from sqlalchemy import and_, or_, func
 import os
+from wxLib.func.qy_weixin_operator import *
+
+
+@app.route('/swiperdemo1')
+def getswiperdemo1():
+    return render_template('vote/mobi/demo-2.html')
 
 
 @app.route('/heka')
 def getHeka():
-    return render_template('vote/mobi/heka1.html')
+    return render_template('vote/mobi/heka2.html')
+
+
+@app.route('/heka1')
+def getHeka1():
+    return render_template('vote/mobi/heka3.html')
 
 
 @app.route('/voteSetting')
@@ -169,6 +179,81 @@ def submitVote():
 
         for selectItem in json['selectItems']:
             action = Vote_action(openid=json['openid'], item_id=int(selectItem), schema_id=json['schema_id'],
+                                 voteDate=unicode(datetime.utcnow()))
+            actions.append(action)
+
+        oldactions = wx_session.query(Vote_action).filter(
+            and_(Vote_action.openid == openid, Vote_action.schema_id == json['schema_id'])).all()
+
+        for oldaction in oldactions:
+            wx_session.delete(oldaction)
+
+        wx_session.add_all(actions)
+        wx_session.commit()
+        return str(openid)
+    except BaseException, e:
+        print e.message
+        return 'error'
+
+
+@app.route('/mobi/vote/qy/<schema_id>')
+def getVoteByQYH(schema_id=None, openid=None):
+    # if not session.has_key('UserId'):
+    # code = request.args.get('code')
+    # agentid = request.args.get('state')
+    #     if code == None or agentid == None:
+    #         return render_template('common/error.html', title=u'错误', message=u'无法确认您的身份或者session过期，请刷新页面重试')
+    #     ret = getPsnInfoByCode(code, agentid)
+    #     if ret.has_key('UserId'):
+    #         session['UserId'] = ret['UserId']
+    #     else:
+    #         return render_template('common/error.html', title=u'错误', message=u'无法确认您的身份或者session过期，请刷新页面重试')
+    session['UserId'] = '107030'
+    psn_detail = wx_session.query(Vote_psn_detail).filter(
+        and_(Vote_psn_detail.schema_id == schema_id, Vote_psn_detail.openid == session['UserId'])).all()
+
+    bz = ''
+    if len(psn_detail) != 0:
+        bz = psn_detail[0].bz
+    schema = wx_session.query(Vote_schema).filter_by(id=schema_id).one()
+    if schema == None:
+        return render_template('vote/error.html', title=u'错误', message=u'您选择的投票不存在')
+    stmt_ps = wx_session.query(Vote_action.item_id, func.count('*').label("ps")).filter(
+        Vote_action.schema_id == schema_id).group_by(Vote_action.item_id).subquery()
+    items = wx_session.query(Vote_item, Vote_action.item_id, stmt_ps.c.ps).outerjoin(stmt_ps,
+                                                                                     stmt_ps.c.item_id == Vote_item.id).outerjoin(
+        Vote_action,
+        and_(Vote_action.item_id == Vote_item.id,
+             Vote_action.openid == session[
+                 'UserId'])).filter(
+        and_(Vote_item.schema_id == schema.id)).all()
+
+    return render_template('vote/mobi/qy/vote.html', schema=schema, userid=session['UserId'], items=items, bz=bz)
+
+
+@app.route('/mobi/vote/qy/submit', methods=['POST'])
+def submitVoteByQYH():
+    if not session.has_key('UserId'):
+        return render_template('vote/error.html', title=u'错误', message=u'无法确认您的微信身份')
+    try:
+        openid = session['UserId']
+
+        data = request.data
+        json = simplejson.loads(data)
+
+        schema_id = json['schema_id']
+        bz = json['bz']
+
+        psninfo = wx_session.query(Document_psn).filter(Document_psn.psncode == session['UserId']).first()
+
+        psn_detail = Vote_psn_detail(openid=openid, schema_id=schema_id, psnname=psninfo.psnname, mobile=psninfo.mobile,
+                                     bz=bz)
+        wx_session.merge(psn_detail)
+
+        actions = list()
+
+        for selectItem in json['selectItems']:
+            action = Vote_action(openid=openid, item_id=int(selectItem), schema_id=json['schema_id'],
                                  voteDate=unicode(datetime.utcnow()))
             actions.append(action)
 

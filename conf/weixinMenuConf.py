@@ -10,6 +10,8 @@ SECRET = 'c9d8f4f5898d4e02fac60a081a9db121'
 
 APP_ID_QY = 'wxeb2ff9ff082f4076'
 SECRET_QY = '3oF4yHGkiiIXjm31cnpq-XievtGixoeMTCofruChZyqd97zQQwie0TWcZ5JDEbKi'
+TOKEN_QY = 'xj5C8Ht6S8xjyYxpjtMwP4cU0h'
+AESKEY_QY = 'Au1kJrXApt3tqhiPlw9uUqlNTw98txpih3s88lna4gJ'
 
 groups = dict(
     g1=dict(
@@ -54,9 +56,9 @@ menus = dict(
     # m1004=dict(
     # title='员工认证',
     # picurl='http://59.57.246.46/static/image/ygzq.png',
-    #     url='http://59.57.246.46/register/%s',
-    #     group=groups['g2'],
-    #     index=4
+    # url='http://59.57.246.46/register/%s',
+    # group=groups['g2'],
+    # index=4
     # ),
     m1005=dict(
         title='员工专区',
@@ -74,9 +76,9 @@ menus = dict(
     )
     # ,
     # m1007=dict(
-    #     title='新年送祝福',
-    #     picurl='http://59.57.246.46/static/image/djs.png',
-    #     url='http://59.57.246.46/collect/1/main/%s',
+    # title='新年送祝福',
+    # picurl='http://59.57.246.46/static/image/djs.png',
+    # url='http://59.57.246.46/collect/1/main/%s',
     #     group=groups['g3'],
     #     index=7
     # )
@@ -157,8 +159,16 @@ errors = dict(
 
 testCommand = dict(
     zhufu='http://59.57.246.46/collect/1/main/%s',
-    yxl='http://59.57.246.46/mobi/vote/1/%s'
+    yxl='http://59.57.246.46/mobi/vote/1/%s',
+    heka='http://59.57.246.46/heka'
 )
+
+newsFolderExt = set(
+    [21, 241, 105, 106, 107, 108, 109, 118, 122, 123, 124, 125, 126, 127, 153, 181, 201, 209, 218, 223, 224, 225, 226,
+     227, 228,
+     229, 234, 236, 240, 244, 247, 248, 256, 258, 259, 260, 261, 262, 263, 274, 29, 30, 34, 35, 36, 37, 38, 41, 43, 55,
+     59, 60
+    ])
 
 if __name__ == '__main__':
     pass

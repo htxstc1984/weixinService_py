@@ -1,0 +1,57 @@
+.bg {
+    width: 35%;
+    /*height: 30%;*/
+    margin: 20px 0px 0px 0px;
+    position: fixed;
+    z-index: -1;
+    filter: alpha(opacity=15);
+    -moz-opacity: 0.15;
+    opacity: 0.15;
+    font-size: 40px;
+    color: #645128;
+    transform: rotate(-15deg);
+    -ms-transform: rotate(-15deg); /* IE 9 */
+    -moz-transform: rotate(-15deg); /* Firefox */
+    -webkit-transform: rotate(-15deg); /* Safari and Chrome */
+    -o-transform: rotate(-15deg); /* Opera */
+}
+
+.topleft {
+    top: 5%;
+    left: 10px;
+}
+
+.topright {
+    top: 20%;
+    right: 10px;
+}
+
+.midleft1 {
+    top: 35%;
+    left: 10px;
+}
+
+.midright1 {
+    top: 50%;
+    right: 10px;
+}
+
+/*.midleft2 {*/
+    /*top: 60%;*/
+    /*left: 10px;*/
+/*}*/
+
+/*.midright2 {*/
+    /*top: 60%;*/
+    /*right: 10px;*/
+/*}*/
+
+.bottomleft {
+    top: 65%;
+    left: 10px;
+}
+
+.bottomright {
+    top: 80%;
+    right: 10px;
+}

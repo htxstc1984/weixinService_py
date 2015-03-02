@@ -19,7 +19,7 @@ from conf.globalConf import SQLALCHEMY_DATABASE_URI
 from flask import Flask
 from sqlalchemy.ext.declarative import declarative_base
 
-engine = create_engine(SQLALCHEMY_DATABASE_URI, pool_size=30)
+engine = create_engine(SQLALCHEMY_DATABASE_URI, pool_size=50)
 wx_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
@@ -116,23 +116,60 @@ class Vote_psn_detail(db.Model, Base, MetaTransform):
     bz = db.Column('bz', db.String(255), nullable=True)
 
 
+class Document_log(db.Model, Base, MetaTransform):
+    __tablename__ = 'document_log'
+    id = db.Column('id', db.Integer, autoincrement=db.Integer, primary_key=True)
+    type = db.Column('type', db.String(255))
+    key = db.Column('key', db.String(255))
+    content = db.Column('content', db.Text)
+    ts = db.Column('ts', db.String(255))
+    successflag = db.Column('successflag', db.String(1), nullable=False)
+
+
 class Document_dept(db.Model, Base, MetaTransform):
     __tablename__ = 'document_dept'
-    id = db.Column('id', db.Integer, autoincrement=db.Integer, primary_key=True)
+    syqcode = Column('syqcode', String(30), primary_key=True)
     deptname = db.Column('deptname', db.String(255), nullable=False)
     fatherid = db.Column('fatherid', db.String(30), nullable=False)
     order = db.Column('order', db.String(30), nullable=False)
-    ehrid = db.Column('ehrid', db.String(30), nullable=False)
     qywxid = db.Column('qywxid', db.String(30), nullable=False)
-    # aa = db.Column('aa', db.String(30), nullable=False)
+    isexist = db.Column('isexist', db.String(1))
+    needrefresh = db.Column('needrefresh', db.String(1))
 
 
-# class Document_psn(db.Model, Base, MetaTransform):
-# __tablename__ = 'document_psn'
-# id = db.Column('id', db.Integer, autoincrement=db.Integer, primary_key=True)
-# psnname = db.Column('psnname', db.String(255), nullable=False)
-# dept = db.Column('dept', db.String(255), nullable=False)
-#     position = db.Column('position', db.String(255), nullable=False)
+class Document_psn(db.Model, Base, MetaTransform):
+    __tablename__ = 'document_psn'
+    psncode = Column('psncode', String(30), primary_key=True)
+    psnname = db.Column('psnname', db.String(255), nullable=False)
+    department = db.Column('department', db.String(255), nullable=True)
+    departmentid = db.Column('departmentid', db.String(255), nullable=True)
+    position = db.Column('position', db.String(255), nullable=True)
+    mobile = db.Column('mobile', db.String(255), nullable=True)
+    email = db.Column('email', db.String(255), nullable=True)
+    officephone = db.Column('officephone', db.String(255), nullable=True)
+    unitname = db.Column('unitname', db.String(255), nullable=True)
+    deptname = db.Column('deptname', db.String(255), nullable=True)
+    weixinid = db.Column('weixinid', db.String(255), nullable=True)
+    qywxid = db.Column('qywxid', db.String(30), nullable=True)
+    ehrid = db.Column('ehrid', db.String(30), nullable=False)
+    isexist = db.Column('isexist', db.String(1))
+    needrefresh = db.Column('needrefresh', db.String(1))
+    notinehr = db.Column('notinehr', db.String(1))
+
+class Document_tag(db.Model, Base, MetaTransform):
+    __tablename__ = 'document_tag'
+    id = db.Column('id', db.Integer, autoincrement=db.Integer, primary_key=True)
+    tagname = db.Column('tagname', db.String(70), nullable=False)
+    qywxid = db.Column('qywxid', db.String(30), nullable=False)
+    source = db.Column('source', db.String(30), nullable=False)
+    source_id = db.Column('source_id', db.String(30), nullable=False)
+
+
+class Document_tag_psn(db.Model, Base, MetaTransform):
+    __tablename__ = 'document_tag_psn'
+    id = db.Column('id', db.Integer, autoincrement=db.Integer, primary_key=True)
+    tag_id = db.Column('tag_id', db.Integer, nullable=False)
+    psn_id = db.Column('psn_id', db.Integer, nullable=False)
 
 
 class Theme_collection(db.Model, Base, MetaTransform):
@@ -155,6 +192,12 @@ class Theme_collection_item(db.Model, Base, MetaTransform):
     mobile = db.Column('mobile', db.String(30), nullable=False)
     psnname = db.Column('psnname', db.String(20), nullable=False)
     createDate = db.Column('createDate', db.Unicode(30), nullable=True)
+
+
+class InnerNews_hits(db.Model, Base, MetaTransform):
+    __tablename__ = 'innernews_hits'
+    id = db.Column('id', db.Integer, autoincrement=db.Integer, primary_key=True)
+    hits = db.Column('hits', db.Integer)
 
 
 if __name__ == '__main__':

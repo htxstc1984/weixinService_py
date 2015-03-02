@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.2">
+    <title>{&newsBody.infotitle&}</title>
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <h3>{&newsBody['title'] | safe&}
+            <br>
+            <small>发布时间:{&newsBody['founddate']&}<font color="red">  内网信息请勿转发</font></small>
+            <br>
+            <small>点击数:{&hits&}</small>
+        </h3>
+    </div>
+    <div>
+        {&newsBody['content'] | safe &}
+        <br/>
+
+    </div>
+
+</div>
+<script type="text/javascript">
+    var username = '{& username &}'
+    $(function () {
+        $("img").removeAttr("style");
+        $("img").attr("width", "80%").attr("height", "");
+
+        $('a').click(function(){
+            alert('提示：受微信平台技术限制，网页中附件链接不能查看，请用办公室电脑浏览。')
+        })
+
+        $('img').click(function(){
+            location.href = this.src
+        })
+
+    })
+</script>
+<link href="/static/css/weixin/qy/qy_comm.css?a=8" rel="stylesheet">
+<script src="/static/js/weixin/qy/qy_username.js?a=8"></script>
+</body>
+</html>

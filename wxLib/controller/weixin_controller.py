@@ -24,9 +24,14 @@ from xml.dom import minidom
 import pycurl, StringIO
 import time as sysTime
 from sqlalchemy import *
-from wxLib.meta.mmsMeta import *
-from wxLib.meta.itgcmsMeta import *
 import re
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    wx_session.remove()
+    session_inner.remove()
+    session_ehr.remove()
+    session_cms.remove()
 
 
 @app.route('/imageView/<src>')
@@ -196,13 +201,17 @@ def getQuery():
 
 @app.route('/itg/query/get', methods=['POST'])
 def getPsnInfos():
-    if not session.has_key('openid'):
-        return render_template('common/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
-    cond = request.form['cond']
-    openid = session['openid']
-    rs = checkOpenid(openid)
-    if rs['resultCode'] != 0:
-        return render_template('common/error.html', title=u'错误', message=u'无法确认您的微信身份')
+    if not session.has_key('UserId'):
+        if not session.has_key('openid'):
+            return render_template('common/error.html', title=u'错误', message=u'无法确认您的微信身份或者session过期，请刷新页面重试')
+        cond = request.form['cond']
+        openid = session['openid']
+        rs = checkOpenid(openid)
+        if rs['resultCode'] != 0:
+            return render_template('common/error.html', title=u'错误', message=u'无法确认您的微信身份')
+    else:
+        cond = request.form['cond']
+        openid = 'oGWhot6q83jPLENglsitEv1xjYCw'
     rs_psn = getPsnPhoneVOs(openid, cond)
     resp = make_response(dumps(rs_psn))
     assert isinstance(resp, Response)
@@ -221,13 +230,21 @@ def weixinrec():
     if vo.has_key('MsgType'):
         if vo['MsgType'] == 'text':
             if testCommand.has_key(vo['Content']):
+
+                retUrl = '没有对应的返回值'
+                v = str(testCommand[vo['Content']])
+                if (v.find('%s') != -1):
+                    retUrl = str(testCommand[vo['Content']]) % vo['FromUserName']
+                else:
+                    retUrl = str(testCommand[vo['Content']])
+
                 retXML = ''
                 retXML += '<xml>'
                 retXML += '<ToUserName><![CDATA[' + vo['FromUserName'] + ']]></ToUserName>'
                 retXML += '<FromUserName><![CDATA[' + vo['ToUserName'] + ']]></FromUserName>'
                 retXML += '<CreateTime>' + str(int(sysTime.time() * 1000)) + '</CreateTime>'
                 retXML += '<MsgType><![CDATA[text]]></MsgType>'
-                retXML += '<Content><![CDATA[' + (testCommand[vo['Content']] % vo['FromUserName']) + ']]></Content>'
+                retXML += '<Content><![CDATA[' + retUrl + ']]></Content>'
                 retXML += '</xml>'
                 retXML = retXML.replace('&lt;', '<').replace('&gt;', '>')
                 return retXML
@@ -330,6 +347,7 @@ def createButtons():
             print 'error'
         else:
             print backinfo
+
 
 
 def getAccessToken(app_id, secret):

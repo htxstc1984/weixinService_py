@@ -34,15 +34,25 @@ def test(url):
 
 
         content = '<xml>'
-        content += '<ToUserName><![CDATA[toUser]]></ToUserName>'
-        content += '<FromUserName><![CDATA[oGWhot6q83jPLENglsitEv1xjYCw]]></FromUserName>'
-        content += '<CreateTime>1348831860</CreateTime>'
+        content += '<ToUserName><![CDATA[107030]]></ToUserName>'
+        content += '<FromUserName><![CDATA[wxeb2ff9ff082f4076]]></FromUserName>'
+        content += '<CreateTime>123456789</CreateTime>'
         content += '<MsgType><![CDATA[event]]></MsgType>'
         content += '<Event><![CDATA[CLICK]]></Event>'
-        content += '<EventKey><![CDATA[employee]]></EventKey>'
-        # + "<Content><![CDATA[投票]]></Content>"
-        # + "<MsgId>1234567890123456</MsgId>"
+        content += '<EventKey><![CDATA[www.qq.com]]></EventKey>'
+        content += '<AgentID>4</AgentID>'
         content += '</xml>'
+
+        # content = '<xml>'
+        # content += '<ToUserName><![CDATA[toUser]]></ToUserName>'
+        # content += '<FromUserName><![CDATA[oGWhot6q83jPLENglsitEv1xjYCw]]></FromUserName>'
+        # content += '<CreateTime>1348831860</CreateTime>'
+        # content += '<MsgType><![CDATA[event]]></MsgType>'
+        # content += '<Event><![CDATA[CLICK]]></Event>'
+        # content += '<EventKey><![CDATA[employee]]></EventKey>'
+        # # + "<Content><![CDATA[投票]]></Content>"
+        # # + "<MsgId>1234567890123456</MsgId>"
+        # content += '</xml>'
         # Option -d/--data <data> HTTP POST data
         crl.setopt(crl.POSTFIELDS, content)
         f = StringIO.StringIO()
@@ -61,6 +71,6 @@ def test(url):
 
 if __name__ == '__main__':
     # print test("http://localhost:8088/weixinrec")
-    print test('http://59.57.246.46/weixinrec')
+    print test('http://localhost:8088/qy/app/4/receive')
     # print test('http://172.16.109.105:8080/WeixinService/weixinrec.html')
     pass

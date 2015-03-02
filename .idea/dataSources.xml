@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="3389040311">
+  <component name="DataSourceManagerImpl" format="xml" hash="3520456801">
     <data-source source="LOCAL" name="MySQL - weixin_py@172.16.10.170" uuid="e0c7f045-e12e-4ab4-a321-60baf9691376">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>

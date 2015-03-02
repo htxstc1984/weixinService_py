@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/js/swiper/idangerous.swiper.css">
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+</head>
+<body>
+<style>
+    body {
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        color: #fff;
+        padding: 0;
+        margin: 0;
+        font-size: 13px;
+    }
+
+    .swiper-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .swiper-wrapper {
+        -webkit-perspective: 1200px;
+        -moz-perspective: 1200px;
+        -ms-perspective: 1200px;
+        perspective: 1200px;
+    }
+
+    .swiper-slide {
+        position: relative;
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        -ms-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+    }
+
+    .title {
+        line-height: 480px;
+        text-align: center;
+        font-weight: 100;
+    }
+
+    .title span {
+        font-size: 45px;
+        line-height: 70px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .inner {
+        padding: 20px;
+        font-size: 14px;
+        font-weight: 300;
+    }
+
+    .caption {
+        font-size: 15px;
+        font-weight: 100;
+        position: absolute;
+        left: 0;
+        top: 70%;
+        width: 100%;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 10px 40px 10px 40px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        text-align: left;
+        font-family: "KaiTi", "KaiTi_GB2312";
+    }
+
+    .bg {
+        position: absolute;
+        background: url(/static/js/Swiper-Smooth-Progress/demos/stars/stars.jpg);
+        width: 100%;
+        height: 100%;
+        padding-right: 800px;
+        left: -200px;
+        overflow: hidden;
+    }
+
+    .swiper-slide img {
+        margin-left: 20%;
+        margin-top: 10%;
+        width: 60%;
+        height: 60%;
+
+        opacity: 0.8;
+
+        -webkit-box-shadow: 0 0 20px rgba(255, 255, 255, .6), inset 0 0 20px rgba(255, 255, 255, 1);
+        -moz-box-shadow: 0 0 20px rgba(255, 255, 255, .6), inset 0 0 20px rgba(255, 255, 255, 1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, .6), inset 0 0 20px rgba(255, 255, 255, 1);
+
+        -webkit-border-radius: 30px;
+        -moz-border-radius: 30px;
+        border-radius: 30px;
+    }
+
+    .logoBlock {
+        text-align: center;
+    }
+
+    .logoBlock div {
+        position: absolute;
+        width: 50px;
+        height: 25px;
+    }
+
+    .text-shadow {
+        color: #fff;
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px red, 0 0 50px red;
+    }
+
+    .icon-play {
+        background-image: url(/static/image/yxl2014/icon-yxl.png);
+        background-position: -107px -62px;
+        background-size: 520px;
+        height: 40px;
+        width: 40px;
+    }
+
+    .smalllogo {
+        position: fixed;
+        top: 5px;
+        left: 5px;
+        width: 60px;
+        height: 30px;
+        display: none;
+    }
+</style>
+
+
+<div class="bg"></div>
+<div class="smalllogo"><img style="width: 100%;height: 100%" src="/static/image/yxl2014/logo2.png"></div>
+<div class="logoBlock" data-pic="/static/image/yxl2014/logo2.png">
+</div>
+
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div id="firstPage" class="swiper-slide">
+            <div id="pageTitle" class="title text-shadow">
+                <span style="margin-top: 60%;">
+                    <p>厦门国贸2014十大影响力事件</p>
+                    <center>
+                        <div>请向右滑动观看</div>
+                    </center>
+                </span>
+            </div>
+
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e1.jpg" alt="">
+
+            <div class="caption">公司成功完成第4次再融资，通过配股方式增加股份333,634,134股，增加股本金1,397,927,021.46元。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e2.jpg" alt="">
+
+            <div class="caption">为获得稳定优质的铁矿石资源，公司与澳大利亚罗伊山铁矿有限公司签订5年累计100亿元人民币的铁矿石长期采购协议。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e3.jpg" alt="">
+
+            <div class="caption">国贸汽车再次进入中国汽车经销商集团百强，获评中国汽车流通行业杰出贡献奖；开拓新能源汽车业务，成为特斯拉租赁方案租赁商。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e4.jpg" alt="">
+
+            <div class="caption">公司公开摘牌受让厦门美岁商业投资有限公司全部股权，配合国贸商城、国贸金融中心建设，布局发展商业零售业务。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e5.jpg" alt="">
+
+            <div class="caption">公司与福建中燃等企业合资成立国贸中燃（厦门）能源有限公司，投资开发液化天然气、压缩天然气等综合能源补给场站。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e6.jpg" alt="">
+
+            <div class="caption">公司自有的两艘7.6万吨散货轮“白鹭洲号”和“凤凰海号”建成下水，投入运营。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e7.jpg" alt="">
+
+            <div class="caption">公司先后在上海自由贸易试验区和深圳前海深港现代服务业合作区设立子公司，发展供应链管理业务。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e8.jpg" alt="">
+
+            <div class="caption">国贸地产进入中国房地产开发企业百强；年度开发面积再创新高；在上海、厦门、合肥又获得新的土地储备，实现区域布局新跨越。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e9.jpg" alt="">
+
+            <div class="caption">国贸金融板块又添新军，深圳金海峡融资租赁有限公司和国贸资本管理有限公司先后注册成立。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e10.jpg" alt="">
+
+            <div class="caption">国贸投资公司、船舶公司与上海东方汇富创业投资管理公司共同发起成立国贸东方海洋装备产业基金。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e11.jpg" alt="">
+
+            <div class="caption">
+                公司获评全国内部审计先进单位，全国守合同重信用企业；本年度位列2014最受赞赏中国公司贸易和进出口行业明星榜第5位、中国非金融类跨国公司百强第81位、中国上市公司500强第118位、中国500最具价值品牌第284位。
+            </div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e12.jpg" alt="">
+
+            <div class="caption">国贸期货获得“产业服务先锋”称号，金海峡获得“中国担保成长先锋”称号。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e13.jpg" alt="">
+
+            <div class="caption">厦门国贸入选上海证券交易所融资融券标的股。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e14.jpg" alt="">
+
+            <div class="caption">《国贸在线》电子交易平台上线运营。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e15.jpg" alt="">
+
+            <div class="caption">公司获准集中管理运营境内外外汇资金，并成功注册80亿元超短融，既拓宽了融资渠道又可进一步降低公司资金成本。</div>
+        </div>
+        <div class="swiper-slide">
+            <img data-original="/static/image/yxl2014/1e16.jpg" alt="">
+
+            <div class="caption">公司与厦门大学国贸系共建MIB创新教育实习基地，多位领导受聘兼职导师。</div>
+        </div>
+        <div class="swiper-slide">
+            <div class="title">
+                <span>谢谢观看</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/swiper/idangerous.swiper.min.js"></script>
+<script src="/static/js/Swiper-Smooth-Progress/demos/js/idangerous.swiper.progress.js"></script>
+
+<script>
+    $(function () {
+        var windowWidth = $(window).width();
+        var windowHeight = $(window).height();
+        var offx = Math.floor((windowWidth - 300) / 20) * 10;
+        var offy = 40;
+        var logoBlock = document.querySelectorAll('.logoBlock')[0];
+        var img = logoBlock.getAttribute('data-pic');
+        var html = '';
+        for (var k = 0; k < 6; k++) {
+            for (var l = 0; l < 6; l++) {
+                html += '<div style="background-image:url(' + img + '); left:' + (l * 50 + offx) + 'px; top:' + (k * 25 + offy) + 'px; background-position:-' + (l * 50) + 'px -' + (k * 25) + 'px"></div>'
+            }
+        }
+        logoBlock.innerHTML = html;
+
+        $('.logoBlock div').each(function (i, elem) {
+            elem['transformProps'] = {
+                rotateX: Math.floor(Math.random() * 180) - 90,
+                rotateY: Math.floor(Math.random() * 180) - 90,
+                translateX: Math.floor(Math.random() * 20) - 40,
+                translateY: Math.floor(Math.random() * 20) - 40,
+                translateZ: Math.floor(Math.random() * 1400) - 700
+            }
+
+            var trans = 'rotateX(' + elem['transformProps']['rotateX'] + 'deg) rotateY(' + elem['transformProps']['rotateY'] + 'deg) translate3d(' + elem['transformProps']['translateX'] + 'px,' + elem['transformProps']['translateY'] + 'px,' + elem['transformProps']['translateZ'] + 'px)';
+            $(elem).css({"transform": trans, "-webkit-transform": trans});
+        })
+
+
+        var bg = document.querySelector('.bg');
+        var mySwiper = new Swiper('.swiper-container', {
+            speed: 1000,
+            progress: true,
+            onProgressChange: function (swiper) {
+
+                for (var i = 0; i < swiper.slides.length; i++) {
+                    var slide = swiper.slides[i];
+                    var progress = slide.progress;
+                    var scale, translate, opacity;
+                    if (progress <= 0) {
+                        opacity = 1 - Math.min(Math.abs(progress), 1);
+                        scale = 1 - Math.min(Math.abs(progress / 2), 1);
+                        translate = progress * swiper.width;
+                    }
+                    else {
+                        opacity = 1 - Math.min(Math.abs(progress / 2), 1);
+                        scale = 1;
+                        translate = 0;
+                    }
+                    slide.style.opacity = opacity;
+                    swiper.setTransform(slide, 'translate3d(' + (translate) + 'px,0,0) scale(' + scale + ')');
+                }
+                swiper.setTranslate(bg, {x: (-swiper.progress * 400)})
+            },
+            onTouchStart: function (swiper) {
+
+                for (var i = 0; i < swiper.slides.length; i++) {
+                    swiper.setTransition(swiper.slides[i], 0);
+                }
+                swiper.setTransition(bg, 0)
+            },
+            onSetWrapperTransition: function (swiper, speed) {
+                for (var i = 0; i < swiper.slides.length; i++) {
+                    swiper.setTransition(swiper.slides[i], speed);
+                }
+                swiper.setTransition(bg, speed);
+            },
+            onSlideChangeStart: function (swiper) {
+                slideId = swiper.activeSlide().id;
+                if (slideId == 'firstPage') {
+                    $('.logoBlock').fadeOut(2000);
+                    $('.smalllogo').fadeIn(2000);
+                }
+            }
+        })
+        // Set Z-Indexes
+        for (var i = 0; i < mySwiper.slides.length; i++) {
+            mySwiper.slides[i].style.zIndex = mySwiper.slides.length - i;
+        }
+
+        $("img").lazyload();
+
+
+        $('.logoBlock div').each(function (i, elem) {
+            var trans = 'scale(1) translate3d(0px,0px,0px) rotateX(0deg) rotateY(0deg)';
+            $(elem).css({
+                "transform": trans,
+                "-webkit-transform": trans,
+                "transition": "transform 4s",
+                "-webkit-transition": "-webkit-transform 3s"
+            });
+        })
+
+        {#        $('#pageTitle').show().fadeIn('slow')#}
+
+        {#        $('.swiper-slide').on('touchstart', function (e) {#}
+        {#            return false#}
+        {#        })#}
+
+        {#        $('#play').on('click', function () {#}
+        {#            #}
+        {#            mySwiper.swipeNext()#}
+        {#        })#}
+
+        {#        $('.logoBlock').each(function (i, elem) {#}
+        {#            var trans = 'translate3d('+(0-($(window).width()-300)/2)+'px,'+(0-40)+'px,0px) scale(0.4) ';#}
+        {#            $(elem).css({#}
+        {#                "transform": trans,#}
+        {#                "-webkit-transform": trans,#}
+        {#                "transition": "transform 3s",#}
+        {#                "-webkit-transition": "-webkit-transform 3s"#}
+        {#            });#}
+        {#        })#}
+    })
+</script>
+</body>
+</html>
