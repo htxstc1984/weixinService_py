@@ -23,15 +23,12 @@
     }
     .blockleft{
         width: 20%;
-        height: 100%;
     }
     .blockleft img{
         width: 100%;
-        height: 100%;
     }
     .blockright{
         width: 70%;
-        height: 100%;
     }
     .blockbottom{
         width: 100%;
@@ -92,13 +89,13 @@
                             <div class="blockbottom">
 
                                 {% if selected==True %}
-                                    <a href="#" class="itemselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-thumbs-up fa-lg pull-right">({&tuple[2] | good_display()&})</i></a>
+                                    <a class="itemselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-thumbs-up fa-lg pull-right">({&tuple[2] | good_display()&})</i></a>
 {#                                    <button id="btn{&item.id&}" bindid="{&item.id&}" style="float: right;"#}
 {#                                            class="btn btn-danger" type="button"#}
 {#                                            ng-click="addSelect('{&item.id&}')">已选#}
 {#                                    </button>#}
                                 {% else %}
-                                    <a href="#" class="itemnoselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-thumbs-o-up fa-lg pull-right">({&tuple[2] | good_display()&})</i></a>
+                                    <a class="itemnoselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-thumbs-o-up fa-lg pull-right">({&tuple[2] | good_display()&})</i></a>
 {#                                    <button id="btn{&item.id&}" bindid="{&item.id&}" style="float: right;"#}
 {#                                            class="btn btn-primary" type="button"#}
 {#                                            ng-click="addSelect('{&item.id&}')">请选择#}

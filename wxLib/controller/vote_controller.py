@@ -198,17 +198,17 @@ def submitVote():
 
 @app.route('/mobi/vote/qy/<schema_id>')
 def getVoteByQYH(schema_id=None, openid=None):
-    # if not session.has_key('UserId'):
-    # code = request.args.get('code')
-    # agentid = request.args.get('state')
-    #     if code == None or agentid == None:
-    #         return render_template('common/error.html', title=u'错误', message=u'无法确认您的身份或者session过期，请刷新页面重试')
-    #     ret = getPsnInfoByCode(code, agentid)
-    #     if ret.has_key('UserId'):
-    #         session['UserId'] = ret['UserId']
-    #     else:
-    #         return render_template('common/error.html', title=u'错误', message=u'无法确认您的身份或者session过期，请刷新页面重试')
-    session['UserId'] = '107030'
+    if not session.has_key('UserId'):
+        code = request.args.get('code')
+        agentid = request.args.get('state')
+        if code == None or agentid == None:
+            return render_template('common/error.html', title=u'错误', message=u'无法确认您的身份或者session过期，请刷新页面重试')
+        ret = getPsnInfoByCode(code, agentid)
+        if ret.has_key('UserId'):
+            session['UserId'] = ret['UserId']
+        else:
+            return render_template('common/error.html', title=u'错误', message=u'无法确认您的身份或者session过期，请刷新页面重试')
+    # session['UserId'] = '107030'
     psn_detail = wx_session.query(Vote_psn_detail).filter(
         and_(Vote_psn_detail.schema_id == schema_id, Vote_psn_detail.openid == session['UserId'])).all()
 
