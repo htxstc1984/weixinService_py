@@ -10,6 +10,7 @@ app.controller('appController', function ($scope, $http) {
     }
 
     $scope.selectItems = new Array();
+    $scope.items_ps = defaultItems_ps;
 
     $scope.addSelect = function (item_id) {
         var checked = $('#btn' + item_id).hasClass('itemselected');
@@ -18,6 +19,7 @@ app.controller('appController', function ($scope, $http) {
             $('#btn' + item_id).addClass('itemnoselected');
             $('#btn' + item_id+' i').removeClass('fa-thumbs-up');
             $('#btn' + item_id+' i').addClass('fa-thumbs-o-up');
+            $scope.items_ps[item_id] = $scope.items_ps[item_id]-1
             //$('#btn' + item_id).html('<i class="fa fa-thumbs-o-up fa-lg pull-right"></i>')
             //$('#btn' + item_id).text('请选择')
         } else {
@@ -26,6 +28,7 @@ app.controller('appController', function ($scope, $http) {
             $('#btn' + item_id).addClass('itemselected');
             $('#btn' + item_id+' i').removeClass('fa-thumbs-o-up');
             $('#btn' + item_id+' i').addClass('fa-thumbs-up');
+            $scope.items_ps[item_id] = $scope.items_ps[item_id]+1
             //$('#btn' + item_id).empty()
             //$('#btn' + item_id).html('<i class="fa fa-thumbs-up fa-lg pull-right"></i>')
             //$('#btn' + item_id).text('已选')
@@ -34,10 +37,7 @@ app.controller('appController', function ($scope, $http) {
     }
 
     $scope.submit = function () {
-        $scope.selectItems = new Array();
-        $('.itemselected').each(function () {
-            $scope.selectItems.push($(this).attr('bindid'));
-        })
+
         $('#submitModal').modal({
             keyboard: true
         })
@@ -45,6 +45,10 @@ app.controller('appController', function ($scope, $http) {
 
     $scope.submitMsg = "";
     $scope.submitAction = function () {
+        $scope.selectItems = new Array();
+        $('.itemselected').each(function () {
+            $scope.selectItems.push($(this).attr('bindid'));
+        })
         bz = $('#bz').val();
         $http.post('/mobi/vote/qy/submit', {
             schema_id: schema_id,
@@ -55,7 +59,7 @@ app.controller('appController', function ($scope, $http) {
                 $scope.submitMsg = '提交失败，请刷新页面重试';
             } else {
                 $scope.submitMsg = '投票成功';
-                location.reload()
+                //location.reload()
             }
             $('#msgModal').modal({
                 keyboard: true

@@ -43,6 +43,7 @@
     var i_bz = '{&bz&}';
     var schema_id = {& schema.id &};
     var defaultSelected = new Array();
+    var defaultItems_ps = {};
 </script>
 <body style="margin: 0;" ng-app="voteApp" ng-controller="appController">
 {#<button style="position: fixed;top: 70%;right: 10px;z-index: 1;opacity: 0.7" class="btn btn-warning" type="button"#}
@@ -56,12 +57,19 @@
             {% for tuple in items %}
                 {% set item=tuple[0] %}
                 {% set selected=False %}
+                <script type="text/javascript">
                 {% if tuple[1]==None %}
                     {% set selected=False %}
                 {% else %}
                     {% set selected=True %}
-                    <script type="text/javascript">defaultSelected[defaultSelected.length] = '{&tuple[1]&}'</script>
+                    defaultSelected[defaultSelected.length] = '{&tuple[1]&}'
                 {% endif %}
+                {% if tuple[2]==None %}
+                    defaultItems_ps['{&item.id&}'] = 0
+                {% else %}
+                    defaultItems_ps['{&item.id&}'] = {&tuple[2]&}
+                {% endif %}
+                </script>
                 {% if total==0 %}
                     {% set total = loop.length %}
                 {% endif %}
@@ -89,13 +97,13 @@
                             <div class="blockbottom">
 
                                 {% if selected==True %}
-                                    <a class="itemselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-thumbs-up fa-lg pull-right">({&tuple[2] | good_display()&})</i></a>
+                                    <a class="itemselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-thumbs-up fa-lg pull-right">({{ items_ps['{&item.id&}'] }})</i></a>
 {#                                    <button id="btn{&item.id&}" bindid="{&item.id&}" style="float: right;"#}
 {#                                            class="btn btn-danger" type="button"#}
 {#                                            ng-click="addSelect('{&item.id&}')">已选#}
 {#                                    </button>#}
                                 {% else %}
-                                    <a class="itemnoselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-thumbs-o-up fa-lg pull-right">({&tuple[2] | good_display()&})</i></a>
+                                    <a class="itemnoselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-thumbs-o-up fa-lg pull-right">({{ items_ps['{&item.id&}'] }})</i></a>
 {#                                    <button id="btn{&item.id&}" bindid="{&item.id&}" style="float: right;"#}
 {#                                            class="btn btn-primary" type="button"#}
 {#                                            ng-click="addSelect('{&item.id&}')">请选择#}
@@ -116,7 +124,7 @@
             {% endif %}
         <div class="row">
             <div class="col-md-4" style="margin: 10px 10px 10px 10px">
-                <button style="float: right" class="btn btn-warning" type="button" ng-click="submit()" ng-disabled="fullSelect()"> &nbsp;&nbsp;提&nbsp;&nbsp;&nbsp;&nbsp;交&nbsp;&nbsp;</button>
+                <button style="float: right" class="btn btn-warning" type="button" ng-click="submitAction()" ng-disabled="fullSelect()"> &nbsp;&nbsp;提&nbsp;&nbsp;&nbsp;&nbsp;交&nbsp;&nbsp;</button>
                 <a style="display:inline-block;text-decoration: none;line-height: 35px;float: right">请选择{&schema.mutimax&}个,已选择{{ selectItems.length }}个</a>
             </div>
         </div>
@@ -191,6 +199,6 @@
 </div>
 
 <script src="http://cdn.bootcss.com/angular.js/1.3.0/angular.min.js"></script>
-<script src="/static/js/weixin/qy/voteApp_qy.js?rq=4"></script>
+<script src="/static/js/weixin/qy/voteApp_qy.js?rq=6"></script>
 </body>
 </html>
