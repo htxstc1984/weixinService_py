@@ -84,4 +84,18 @@ app.controller('appController', function ($scope, $http) {
             keyboard: true
         })
     }
+
+    $scope.goods_display = function (item_id) {
+        goods = $scope.items_ps[item_id]
+        if (goods > 50 && goods <= 100){
+            return '50+'
+        }else if(goods > 100 && goods <= 200){
+            return '100+'
+        }else if(goods > 200 && goods <= 300){
+            return '200+'
+        }else if(goods > 300){
+            return '300+'
+        }
+        return goods
+    }
 })
