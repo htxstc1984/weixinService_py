@@ -97,13 +97,13 @@
                             <div class="blockbottom">
 
                                 {% if selected==True %}
-                                    <a class="itemselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-thumbs-up fa-lg pull-right">({{ goods_display('{&item.id&}') }})</i></a>
+                                    <a class="itemselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-check fa-lg pull-right"><font color="red">我最喜爱</font> </i></a>
 {#                                    <button id="btn{&item.id&}" bindid="{&item.id&}" style="float: right;"#}
 {#                                            class="btn btn-danger" type="button"#}
 {#                                            ng-click="addSelect('{&item.id&}')">已选#}
 {#                                    </button>#}
                                 {% else %}
-                                    <a class="itemnoselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-thumbs-o-up fa-lg pull-right">({{ goods_display('{&item.id&}') }})</i></a>
+                                    <a class="itemnoselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-check-circle fa-lg pull-right"><font color="green">请选择</font> </i></a>
 {#                                    <button id="btn{&item.id&}" bindid="{&item.id&}" style="float: right;"#}
 {#                                            class="btn btn-primary" type="button"#}
 {#                                            ng-click="addSelect('{&item.id&}')">请选择#}
@@ -199,6 +199,6 @@
 </div>
 
 <script src="http://cdn.bootcss.com/angular.js/1.3.0/angular.min.js"></script>
-<script src="/static/js/weixin/qy/voteApp_qy.js?rq=7"></script>
+<script src="/static/js/weixin/qy/voteApp_qy.js?rq=10"></script>
 </body>
 </html>

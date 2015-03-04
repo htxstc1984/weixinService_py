@@ -19,8 +19,9 @@ app.controller('appController', function ($scope, $http) {
             $('#btn' + item_id).addClass('itemnoselected');
             $('#btn' + item_id+' i').removeClass('fa-thumbs-up');
             $('#btn' + item_id+' i').addClass('fa-thumbs-o-up');
-            $scope.items_ps[item_id] = $scope.items_ps[item_id]-1
-            //$('#btn' + item_id).html('<i class="fa fa-thumbs-o-up fa-lg pull-right"></i>')
+            //$scope.items_ps[item_id] = $scope.items_ps[item_id]-1
+            $('#btn' + item_id).empty()
+            $('#btn' + item_id).html('<i class="fa fa-check-circle fa-lg pull-right"><font color="green">请选择</font></i>')
             //$('#btn' + item_id).text('请选择')
         } else {
             $scope.selectItems.push(item_id);
@@ -28,9 +29,9 @@ app.controller('appController', function ($scope, $http) {
             $('#btn' + item_id).addClass('itemselected');
             $('#btn' + item_id+' i').removeClass('fa-thumbs-o-up');
             $('#btn' + item_id+' i').addClass('fa-thumbs-up');
-            $scope.items_ps[item_id] = $scope.items_ps[item_id]+1
-            //$('#btn' + item_id).empty()
-            //$('#btn' + item_id).html('<i class="fa fa-thumbs-up fa-lg pull-right"></i>')
+            //$scope.items_ps[item_id] = $scope.items_ps[item_id]+1
+            $('#btn' + item_id).empty()
+            $('#btn' + item_id).html('<i class="fa fa-check fa-lg pull-right"><font color="red">我最喜爱</font> </i>')
             //$('#btn' + item_id).text('已选')
         }
         //alert($scope.selectItems.length)
