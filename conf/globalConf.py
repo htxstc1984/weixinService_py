@@ -21,7 +21,7 @@ SQLALCHEMY_DATABASE_URI_EHR = 'mssql+pymssql://weixin:Nixiew20141229@172.16.10.1
 
 EHR_WSDL_URI = 'http://172.16.10.107/uapws/service/nc.ws.intf.IPsnService?wsdl'
 
-ROOT_PATH = os.path.dirname(__file__)
+# ROOT_PATH = os.path.dirname(__file__)
 
 
 

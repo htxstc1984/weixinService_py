@@ -18,7 +18,7 @@ from wxLib.meta.mmsMeta import *
 import os
 import logging
 from logging.handlers import RotatingFileHandler
-
+ROOT_PATH = os.path.dirname(__file__)
 try:
     app = Flask(__name__)
     app.debug = True

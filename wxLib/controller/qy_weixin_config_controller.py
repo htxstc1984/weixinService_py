@@ -33,6 +33,10 @@ from werkzeug.utils import redirect
 from wxLib.callws.ehr import *
 from wxLib.func.qy_weixin_operator import *
 
+from apscheduler.scheduler import Scheduler
+
+schedudler = Scheduler(daemonic=False)
+
 
 @app.route('/qy/app/5/main')
 def getCommunity():
@@ -83,11 +87,11 @@ def getInnerInfo(page=0):
     # for file in kfiles:
     # news = {}
     # news['foldername'] = file[1].encode('latin-1').decode('gbk')
-    #     news['title'] = file[2].encode('latin-1').decode('gbk')
-    #     news['founddate'] = file[3]
-    #     news['id'] = file[4]
-    #     newsList.append(news)
-    #     print str(session_inner.bind.engine.pool._overflow)
+    # news['title'] = file[2].encode('latin-1').decode('gbk')
+    # news['founddate'] = file[3]
+    # news['id'] = file[4]
+    # newsList.append(news)
+    # print str(session_inner.bind.engine.pool._overflow)
     # return render_template('weixin/qy/itgInnerNews.html', newsList=newsList, page=page)
 
     if not session.has_key('UserId'):
@@ -260,57 +264,58 @@ def qyApp4receive():
         my = decodeXML.find("ToUserName").text
 
         msgType = decodeXML.find("MsgType").text
-        app.logger.info(msgType)
-        if msgType == 'event':
-            event = decodeXML.find("Event").text
-            app.logger.info(event)
-            if event == 'enter_agent' or event == 'click':
-                userid = decodeXML.find("FromUserName").text
-                kfiles = session_inner.query(kfile.fatherid, kfolder.foldername, kfile.title,
-                                             kfile.founddate, kfile.id).join(kfolder,
-                                                                             kfile.fatherid == kfolder.id).filter(
-                    kfile.showflag == 'Y').order_by(kfile.founddate.desc(), kfile.id.desc()).limit(5).all()
-
-                newsList = []
-                newsList.append({'title': '点击打开完整内网信息：', 'url': makeSafeUrl('http://59.57.246.46/qy/app/4/main/0'),
-                                 'picurl': 'http://59.57.246.46/static/image/logo4.jpg'})
-                num = 1
-                for file in kfiles:
-                    news = {}
-                    news['title'] = str(file[2].encode('latin-1').decode('gbk'))
-                    news['url'] = makeSafeUrl('http://59.57.246.46/qy/app/4/view/' + str(file[4]))
-                    news['picurl'] = 'http://59.57.246.46/static/image/num-' + str(num) + '.png'
-                    newsList.append(news)
-                    num += 1
-
-                # newsList.append({'title': '查看所有内网新闻>>>', 'url': makeSafeUrl('http://59.57.246.46//qy/app/4/main/0'),
-                # 'picurl': 'http://59.57.246.46/static/image/gmgl2.png'})
-
-                msgdata = {
-                    "touser": userid,
-                    "msgtype": "news",
-                    "agentid": "4",
-                    "news": {
-                        "articles": newsList
-                    }
-                }
-                app.logger.info(dumps(msgdata, ensure_ascii=False))
-                retData = sendMsgToUser(msgdata)
-                app.logger.info(retData['errmsg'])
-
-                retXML = ''
-                retXML += '<xml>'
-                retXML += '<ToUserName><![CDATA[' + userid + ']]></ToUserName>'
-                retXML += '<FromUserName><![CDATA[' + my + ']]></FromUserName>'
-                retXML += '<CreateTime>' + str(int(sysTime.time() * 1000)) + '</CreateTime>'
-                retXML += '<MsgType><![CDATA[text]]></MsgType>'
-                retXML += '<Content><![CDATA[]]></Content>'
-                retXML += '</xml>'
-                retXML = retXML.replace('&lt;', '<').replace('&gt;', '>')
-
-                ret, sEncryptMsg = wxcpt.EncryptMsg(retXML, sReqNonce, sReqTimeStamp)
-
-                return sEncryptMsg
+        # 以下代码是进入APP自动回复
+        # app.logger.info(msgType)
+        # if msgType == 'event':
+        # event = decodeXML.find("Event").text
+        # app.logger.info(event)
+        #     if event == 'enter_agent' or event == 'click':
+        #         userid = decodeXML.find("FromUserName").text
+        #         kfiles = session_inner.query(kfile.fatherid, kfolder.foldername, kfile.title,
+        #                                      kfile.founddate, kfile.id).join(kfolder,
+        #                                                                      kfile.fatherid == kfolder.id).filter(
+        #             kfile.showflag == 'Y').order_by(kfile.founddate.desc(), kfile.id.desc()).limit(5).all()
+        #
+        #         newsList = []
+        #         newsList.append({'title': '点击打开完整内网信息：', 'url': makeSafeUrl('http://59.57.246.46/qy/app/4/main/0'),
+        #                          'picurl': 'http://59.57.246.46/static/image/logo4.jpg'})
+        #         num = 1
+        #         for file in kfiles:
+        #             news = {}
+        #             news['title'] = str(file[2].encode('latin-1').decode('gbk'))
+        #             news['url'] = makeSafeUrl('http://59.57.246.46/qy/app/4/view/' + str(file[4]))
+        #             news['picurl'] = 'http://59.57.246.46/static/image/num-' + str(num) + '.png'
+        #             newsList.append(news)
+        #             num += 1
+        #
+        #         # newsList.append({'title': '查看所有内网新闻>>>', 'url': makeSafeUrl('http://59.57.246.46//qy/app/4/main/0'),
+        #         # 'picurl': 'http://59.57.246.46/static/image/gmgl2.png'})
+        #
+        #         msgdata = {
+        #             "touser": userid,
+        #             "msgtype": "news",
+        #             "agentid": "4",
+        #             "news": {
+        #                 "articles": newsList
+        #             }
+        #         }
+        #         # app.logger.info(dumps(msgdata, ensure_ascii=False))
+        #         retData = sendMsgToUser(msgdata)
+        #         # app.logger.info(retData['errmsg'])
+        #
+        #         retXML = ''
+        #         retXML += '<xml>'
+        #         retXML += '<ToUserName><![CDATA[' + userid + ']]></ToUserName>'
+        #         retXML += '<FromUserName><![CDATA[' + my + ']]></FromUserName>'
+        #         retXML += '<CreateTime>' + str(int(sysTime.time() * 1000)) + '</CreateTime>'
+        #         retXML += '<MsgType><![CDATA[text]]></MsgType>'
+        #         retXML += '<Content><![CDATA[]]></Content>'
+        #         retXML += '</xml>'
+        #         retXML = retXML.replace('&lt;', '<').replace('&gt;', '>')
+        #
+        #         ret, sEncryptMsg = wxcpt.EncryptMsg(retXML, sReqNonce, sReqTimeStamp)
+        #
+        #         return sEncryptMsg
 
     return ''
 
@@ -373,8 +378,6 @@ def qyApp3receive():
     ret, sEncryptMsg = wxcpt.EncryptMsg(retXML, sReqNonce, sReqTimeStamp)
 
     return sEncryptMsg
-
-
 
 
 @app.route('/qy/manage/fromehr/syq')
@@ -618,7 +621,62 @@ def getstaticfilefrominner(rq=None, fname=None):
 
 
 
+def pushInnerNews(type=1):
+    nowDate = sysTime.strftime('%Y-%m-%d', sysTime.localtime(sysTime.time()))
+    if type == 1:
+        dt = nowDate
+        dt_title = '上午'
+    else:
+        dt = nowDate + ' 12:30:00'
+        dt_title = '下午'
+    kfiles = session_inner.query(kfile.fatherid, kfolder.foldername, kfile.title,
+                                 kfile.founddate, kfile.id).join(kfolder,
+                                                                 kfile.fatherid == kfolder.id).filter(
+        and_(kfile.showflag == 'Y', kfile.foundtime >= dt)).order_by(kfile.foundtime.desc(),
+                                                                     kfile.id.desc()).limit(5).all()
 
+    newsList = []
+    newsList.append({'title': nowDate + dt_title + '最新信息：',
+                     'url': makeSafeUrl('http://59.57.246.46/qy/app/4/main/0'),
+                     'picurl': 'http://59.57.246.46/static/image/logo4.jpg'})
+    num = 1
+    for file in kfiles:
+        news = {}
+        news['title'] = str(file[2].encode('latin-1').decode('gbk'))
+        news['url'] = makeSafeUrl('http://59.57.246.46/qy/app/4/view/' + str(file[4]))
+        news['picurl'] = 'http://59.57.246.46/static/image/num-' + str(num) + '.png'
+        newsList.append(news)
+        num += 1
+    if len(newsList) > 1:
+        msgdata = {
+            "touser": '107030',
+            # "totag": '3',
+            "msgtype": "news",
+            "agentid": "4",
+            "news": {
+                "articles": newsList
+            }
+        }
+        retData = sendMsgToUser(msgdata)
+        if retData['errcode']!=0:
+            log = Document_log()
+            log.type = 'innerPush'
+            log.successflag = '1'
+            log.content = retData['errmsg']
+            log.ts = str(datetime.now())
+            wx_session.add(log)
+            wx_session.commit()
+        # app.logger.info(retData['errmsg'])
+
+@schedudler.cron_schedule(second='10', hour='12', minute='30')
+def pushInnerAM():
+    pushInnerNews(1)
+
+@schedudler.cron_schedule(second='10', hour='6', minute='0')
+def pushInnerAM():
+    pushInnerNews(2)
+
+schedudler.start()
 
 if __name__ == '__main__':
     pass

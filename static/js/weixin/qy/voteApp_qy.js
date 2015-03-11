@@ -21,17 +21,17 @@ app.controller('appController', function ($scope, $http) {
             $('#btn' + item_id+' i').addClass('fa-thumbs-o-up');
             //$scope.items_ps[item_id] = $scope.items_ps[item_id]-1
             $('#btn' + item_id).empty()
-            $('#btn' + item_id).html('<i class="fa fa-check-circle fa-lg pull-right"><font color="green">请选择</font></i>')
+            $('#btn' + item_id).html('<i class="fa fa-check-circle fa-lg pull-right"><font color="green" size="small">请选择</font></i>')
             //$('#btn' + item_id).text('请选择')
         } else {
-            $scope.selectItems.push(item_id);
+            //$scope.selectItems.push(item_id);
             $('#btn' + item_id).removeClass('itemnoselected');
             $('#btn' + item_id).addClass('itemselected');
             $('#btn' + item_id+' i').removeClass('fa-thumbs-o-up');
             $('#btn' + item_id+' i').addClass('fa-thumbs-up');
             //$scope.items_ps[item_id] = $scope.items_ps[item_id]+1
             $('#btn' + item_id).empty()
-            $('#btn' + item_id).html('<i class="fa fa-check fa-lg pull-right"><font color="red">我最喜爱</font> </i>')
+            $('#btn' + item_id).html('<i class="fa fa-check fa-lg pull-right"><font color="red" size="small">我最喜爱</font> </i>')
             //$('#btn' + item_id).text('已选')
         }
         //alert($scope.selectItems.length)
@@ -73,6 +73,12 @@ app.controller('appController', function ($scope, $http) {
         $('.itemselected').each(function () {
             $scope.selectItems.push($(this).attr('bindid'));
         })
+        if($scope.selectItems.length > mutimax){
+            $scope.submitMsg = '对不起，可选节目为'+mutimax+'个，您当前已选择'+$scope.selectItems.length+'个，将无法提交';
+            $('#msgModal').modal({
+                keyboard: true
+            })
+        }
         return !($scope.selectItems.length == mutimax);
     }
 

@@ -81,6 +81,7 @@ class Vote_item(db.Model, Base, MetaTransform):
     itemtitle = db.Column('itemtitle', db.Unicode(255), nullable=False)
     itemdesc = db.Column('itemdesc', db.Text, nullable=False)
     picurl = db.Column('picurl', db.Unicode(255), nullable=True)
+    ps = db.Column('ps', db.Integer)
 
     def getSimpleDict(self):
         return dict(id=self.id,

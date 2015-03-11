@@ -26,6 +26,8 @@ import time as sysTime
 from sqlalchemy import *
 import re
 
+
+
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     wx_session.remove()
@@ -382,6 +384,8 @@ def getRightHtml(content):
     for item in items:
         content = rgExp2.sub(item + u'http://www.itg.com.cn', content)
     return content
+
+
 
 
 if __name__ == '__main__':

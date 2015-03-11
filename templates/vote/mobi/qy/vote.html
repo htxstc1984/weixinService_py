@@ -22,13 +22,13 @@
         vertical-align:top;
     }
     .blockleft{
-        width: 20%;
+        width: 30%;
     }
     .blockleft img{
         width: 100%;
     }
     .blockright{
-        width: 70%;
+        width: 65%;
     }
     .blockbottom{
         width: 100%;
@@ -88,7 +88,12 @@
                         {#                    </div>#}
                         <div class="panel-body">
                             <div class="blockleft">
-                                <img src="/static/image/yuanxiao.png">
+                                {% if item.picurl==None %}
+                                    <img src="/static/image/yuanxiao.png">
+                                {% else %}
+                                    <img src="{&item.picurl&}">
+                                {% endif %}
+
                             </div>
                             <div class="blockright">
                                 <p style="line-height: 20px;font-size: 16px">{&item.itemtitle&}</p>
@@ -97,13 +102,13 @@
                             <div class="blockbottom">
 
                                 {% if selected==True %}
-                                    <a class="itemselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-check fa-lg pull-right"><font color="red">我最喜爱</font> </i></a>
+                                    <a class="itemselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-check fa-lg pull-right"><font color="red" size="small">我最喜爱</font> </i></a>
 {#                                    <button id="btn{&item.id&}" bindid="{&item.id&}" style="float: right;"#}
 {#                                            class="btn btn-danger" type="button"#}
 {#                                            ng-click="addSelect('{&item.id&}')">已选#}
 {#                                    </button>#}
                                 {% else %}
-                                    <a class="itemnoselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-check-circle fa-lg pull-right"><font color="green">请选择</font> </i></a>
+                                    <a class="itemnoselected" id="btn{&item.id&}" bindid="{&item.id&}" ng-click="addSelect('{&item.id&}')"><i class="fa fa-check-circle fa-lg pull-right"><font color="green" size="small">请选择</font> </i></a>
 {#                                    <button id="btn{&item.id&}" bindid="{&item.id&}" style="float: right;"#}
 {#                                            class="btn btn-primary" type="button"#}
 {#                                            ng-click="addSelect('{&item.id&}')">请选择#}
@@ -199,6 +204,6 @@
 </div>
 
 <script src="http://cdn.bootcss.com/angular.js/1.3.0/angular.min.js"></script>
-<script src="/static/js/weixin/qy/voteApp_qy.js?rq=10"></script>
+<script src="/static/js/weixin/qy/voteApp_qy.js?rq=13"></script>
 </body>
 </html>
